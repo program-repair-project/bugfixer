@@ -1,0 +1,147 @@
+{
+	"name": "bugfixer",
+	"displayName": "Bugfixer",
+	"description": "",
+	"version": "0.7.0",
+	"engines": {
+		"vscode": "^1.59.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": [
+      	{
+			"type": "object",
+			"title": "Bugfixer 설정",
+			"properties": {
+				"bugfixer.engineType": {
+					"type": "string",
+					"default": "astor",
+					"enum": [
+						"astor",
+						"prophet"
+					],
+					"description": "엔진 종류"
+				},
+				"bugfixer.engineOption": {
+					"type": "string",
+					"default": "trace",
+					"description": "추가 옵션"
+				},
+				"bugfixer.logPath": {
+					"type": "string",
+					"default": "",
+					"description": "Bugfixer 로그 디렉토리"
+				},
+				"bugfixer.logLevel": {
+					"type": "string",
+					"default": "trace",
+					"enum": [
+						"info",
+						"debug",
+						"trace"
+					],
+					"description": "로그 수준"
+				}
+			}
+		}],
+		"commands": [
+			{
+				"command": "bugfixer.run",
+				"title": "Bugfixer 실행"
+			},
+			{
+				"command": "bugfixer.diff",
+				"title": "[BugFixer] File Open"
+			},
+			{
+				"command": "bugfixer.showProgress",
+				"title": "[BigFixer] Show Progress Page"
+			},
+			{
+				"command": "bugfixer.setOutputPath2",
+				"title": "결과 경로 변경",
+				"icon": {
+					"light": "resources/icon/edit.svg",
+					"dark": "resources/icon/edit.svg"
+				}
+			},
+			{
+				"command": "bugfixer.refreshResult",
+				"title": "새로 고침",
+				"icon": "resources/icon/refresh.svg"
+			}
+			
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "bugfixer-result",
+					"title": "Bugfixer 결과",
+					"icon": "resources/icon/bug-solid.svg"
+				}
+			]
+		},
+		"views": {
+			"bugfixer-result": [
+				{
+					"id": "bugfixerResult",
+					"name": "Bugfixer 결과"
+				}
+			]
+		},
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "bugfixer.run"
+				}
+			],
+			"view/title": [
+				{
+					"command": "bugfixer.setOutputPath2",
+					"when": "view == bugfixerResult",
+					"group": "navigation"
+				},
+				{
+					"command": "bugfixer.refreshResult",
+					"when": "view == bugfixerResult",
+					"group": "navigation"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"@types/vscode": "^1.59.0",
+		"@typescript-eslint/eslint-plugin": "^4.26.0",
+		"@typescript-eslint/parser": "^4.26.0",
+		"eslint": "^7.27.0",
+		"glob": "^7.1.7",
+		"mocha": "^8.4.0",
+		"typescript": "^4.3.2",
+		"vscode-test": "^1.5.2"
+	},
+	"dependencies": {
+		"class-transformer": "^0.4.0",
+		"es6-shim": "^0.35.6",
+		"get-all-files": "^4.1.0",
+		"globby": "^12.0.2",
+		"parse-diff": "^0.8.1",
+		"reflect-metadata": "^0.1.13"
+	}
+}
