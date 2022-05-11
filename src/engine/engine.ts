@@ -4,6 +4,7 @@ export abstract class Engine {
     private _analyze_cmd: string;
     private _build_cmd: string = "";
     private _clean_build_cmd: string = "";
+    protected _report_file: string = "";
 
     abstract get_analysis_cmd(): string[];
     abstract get_incremental_cmd(): string[];

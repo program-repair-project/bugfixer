@@ -5,11 +5,12 @@ import {
     ProgressLocation   } from "vscode";
   
   import * as child_process from "child_process";
-  import * as path from "path";
   import * as vscode from "vscode";
 
   import { SaverEngine } from "./engine/saver";
   import { Engine } from "./engine/engine";
+
+  import * as util from "./common/util";
   
   export class BugfixerController {
     private _commandForAnalysis: Disposable;
@@ -19,7 +20,6 @@ import {
       (uri:vscode.Uri) => {
         this.analyse(uri);
       });
-  
     }
   
     public dispose() {
@@ -34,8 +34,6 @@ import {
       let args: string[] = engine.get_analysis_cmd();
       
       vscode.window.showInformationMessage(`${engine.analyze_cmd} ${args.join(" ")}`);
-  
-      //vscode.commands.executeCommand('bugfixer.showProgress');
   
       window.withProgress({
         location: ProgressLocation.Notification,
@@ -52,28 +50,31 @@ import {
           let bugfixer = child_process.spawn(
             engine.analyze_cmd,
             args,
-            {cwd:"/home/saver/test/sbuild/linux/sbuild2"}
+            {cwd: util.getCwd()}
           );
           
-          bugfixer.stderr.on("data", data => (errmsg += data.toString()));
+          bugfixer.stderr.on("data", data => {
+            let log: string = data.toString();
+            errmsg += log;
+
+            if(log.includes("Starting analysis..."))
+            {
+              progress.report({ message: `${engine.name} 분석 중`});
+            }
+          });
+
           bugfixer.stdout.on("data", data => {
-              let log: string = data.toString();
-              result += log;
-  
-              progress.report({ message: log});
-              if (log.startsWith("[")) {
-                let re = /^.* - /g;
-                log = log.replace(re, "");
-  
-                //this.pushLog(log);
-                progress.report({ message: log});
-              }
+            let log: string = data.toString();
+            result += data.toString();
+
+            progress.report({ message: log});
           });
   
           bugfixer.on("exit", (code) => {
             if(code === 0) {
               progress.report({ increment: 100, message: "실행 완료" });
               vscode.window.showInformationMessage(`${engine.name} 실행이 완료되었습니다.`);
+              vscode.commands.executeCommand('bugfixer.refreshBugs');
             } else if (canceled) {
               vscode.window.showInformationMessage(`${engine.name} 실행이 취소되었습니다.`);
               bugfixer.kill();

@@ -1,6 +1,7 @@
 import { Engine } from "./engine";
 
 export class SaverEngine extends Engine {
+    protected _report_file: string = "report.json";
 
     constructor(name:string, analyze_cmd:string, output_path:string) {
         super(name, analyze_cmd, output_path);

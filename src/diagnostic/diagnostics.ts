@@ -1,3 +1,5 @@
+
+
 /*---------------------------------------------------------
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
@@ -20,16 +22,16 @@ const EMOJI = 'emoji';
  * Analyzes the text document for problems. 
  * This demo diagnostic problem provider finds all mentions of 'emoji'.
  * @param doc text document to analyze
- * @param emojiDiagnostics diagnostic collection
+ * @param bugfixerDiagnostics diagnostic collection
  */
-export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: vscode.DiagnosticCollection): void {
+export function refreshDiagnostics(bugfixerDiagnostics: vscode.DiagnosticCollection): void {
 	// read from infer-out/bugs.txt
-	
-  const reportPath = '/home/saver/test/sbuild/linux/sbuild2/infer-out/report.json';
+	const cwd = util.getCwd();
+  const reportPath = path.join(cwd, "infer-out", "report.json");
 
   if(!util.pathExists(reportPath)) return;
-    
-  const jsonString = readFileSync('/home/saver/test/sbuild/linux/sbuild2/infer-out/report.json', 'utf-8');
+	   
+  const jsonString = readFileSync(reportPath, 'utf-8');
 	const data: SaverBug[] = JSON.parse(jsonString);
 	
 	// get file, severity, code, message, line, column
@@ -38,13 +40,13 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 
 	// create diagnostics
 	files.map(f => {
-		const uri = vscode.Uri.file(path.join('/home/saver/test/sbuild/linux/sbuild2', f));
-		emojiDiagnostics.delete(uri);
+		const uri = vscode.Uri.file(path.join(cwd, f));
+		bugfixerDiagnostics.delete(uri);
 		const diagnostics: vscode.Diagnostic[] = [];
 
 		const file_bugs = bugs.filter(b => (b.file === f));
 		file_bugs.map(bug => diagnostics.push(createDiagnostic(bug)));
-		emojiDiagnostics.set(uri, diagnostics);
+		bugfixerDiagnostics.set(uri, diagnostics);
 	});
 	
 }
@@ -59,24 +61,21 @@ function createDiagnostic(bug:Bug): vscode.Diagnostic {
 	return diagnostic;
 }
 
-export function subscribeToDocumentChanges(context: vscode.ExtensionContext, emojiDiagnostics: vscode.DiagnosticCollection): void {
-	if (vscode.window.activeTextEditor) {
-		refreshDiagnostics(vscode.window.activeTextEditor.document, emojiDiagnostics);
+export function subscribeToDocumentChanges(context: vscode.ExtensionContext, bugfixerDiagnostics: vscode.DiagnosticCollection): void {
+  vscode.commands.registerCommand("bugfixer.refreshBugs", () => {refreshDiagnostics(bugfixerDiagnostics);});
+  
+  if (vscode.window.activeTextEditor) {
+		refreshDiagnostics(bugfixerDiagnostics);
 	}
 	context.subscriptions.push(
 		vscode.window.onDidChangeActiveTextEditor(editor => {
 			if (editor) {
-				refreshDiagnostics(editor.document, emojiDiagnostics);
+				refreshDiagnostics(bugfixerDiagnostics);
 			}
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, emojiDiagnostics))
+		vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(bugfixerDiagnostics))
 	);
-
-	context.subscriptions.push(
-		vscode.workspace.onDidCloseTextDocument(doc => emojiDiagnostics.delete(doc.uri))
-	);
-
 }

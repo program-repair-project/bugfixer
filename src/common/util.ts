@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as vscode from 'vscode';
 
 export function pathExists(p: string): boolean {
 	try {
@@ -9,4 +10,9 @@ export function pathExists(p: string): boolean {
   
 	return true;
 }
-  
+
+export function getCwd(): string {
+	if(vscode.workspace.workspaceFolders === undefined) return "";
+
+  return vscode.workspace.workspaceFolders[0].uri.path;
+} 
