@@ -1,3 +1,5 @@
+import {Bug} from '../dto/bug'
+
 export abstract class Engine {
     private _name: string;
     private _output_path: string;
@@ -8,7 +10,7 @@ export abstract class Engine {
 
     abstract get_analysis_cmd(): string[];
     abstract get_incremental_cmd(): string[];
-    abstract get_result(): void;
+    abstract get_file_bugs_map(): Map<string, Bug[]>;
     abstract get_patch_cmd(): string[];
     
     constructor(name:string, analyze_cmd:string, output_path:string){

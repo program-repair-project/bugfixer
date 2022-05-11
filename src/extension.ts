@@ -8,10 +8,10 @@ import { subscribeToDocumentChanges } from './diagnostic/diagnostics';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  let bugfixer = new BugfixerController(context);
+  	let bugfixer = new BugfixerController(context);
 	context.subscriptions.push(bugfixer);
 
-  const bugfixerDiagnostics = vscode.languages.createDiagnosticCollection("bugfixer");
+  	const bugfixerDiagnostics = vscode.languages.createDiagnosticCollection("bugfixer");
 	context.subscriptions.push(bugfixerDiagnostics);
 
 	subscribeToDocumentChanges(context, bugfixerDiagnostics);

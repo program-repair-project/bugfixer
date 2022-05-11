@@ -24,11 +24,6 @@ export class SaverBug {
 	) {}
 
 	public static toBug(saverBug: SaverBug): Bug {
-		// if name == MEMORY_LEAK
-		// get src, sink
-		
-
-
 		return new Bug(saverBug.kind, saverBug.bug_type, saverBug.qualifier, saverBug.line, saverBug.column, saverBug.file);
 	}
 }

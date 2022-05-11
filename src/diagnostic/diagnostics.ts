@@ -8,15 +8,9 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { readFileSync} from 'fs';
-import {SaverBug, Bug} from '../bug/bug';
 import * as util from '../common/util';
-
-/** Code that is used to associate diagnostic entries with code actions. */
-export const EMOJI_MENTION = 'emoji_mention';
-
-/** String to detect in the text document. */
-const EMOJI = 'emoji';
+import { Bug } from '../dto/bug';
+import { EngineEnv } from '../engine/engine_env';
 
 /**
  * Analyzes the text document for problems. 
@@ -26,29 +20,24 @@ const EMOJI = 'emoji';
  */
 export function refreshDiagnostics(bugfixerDiagnostics: vscode.DiagnosticCollection): void {
 	// read from infer-out/bugs.txt
+	const patch_maker = EngineEnv.getInstance().get_patch_maker();
+
+	const results = patch_maker.get_file_bugs_map();
+
+	if(results.size === 0) return;
+
 	const cwd = util.getCwd();
-  const reportPath = path.join(cwd, "infer-out", "report.json");
 
-  if(!util.pathExists(reportPath)) return;
-	   
-  const jsonString = readFileSync(reportPath, 'utf-8');
-	const data: SaverBug[] = JSON.parse(jsonString);
-	
-	// get file, severity, code, message, line, column
-	const bugs: Bug[] = data.filter(d => d.kind === "ERROR").map(d => SaverBug.toBug(d));
-	const files = Array.from(new Set(bugs.map(b => b.file)));
-
-	// create diagnostics
-	files.map(f => {
-		const uri = vscode.Uri.file(path.join(cwd, f));
-		bugfixerDiagnostics.delete(uri);
+	results.forEach((bugs, file) => {
 		const diagnostics: vscode.Diagnostic[] = [];
 
-		const file_bugs = bugs.filter(b => (b.file === f));
-		file_bugs.map(bug => diagnostics.push(createDiagnostic(bug)));
+		const uri = vscode.Uri.file(path.join(cwd, file));
+		bugfixerDiagnostics.delete(uri);
+
+		bugs.map(bug => diagnostics.push(createDiagnostic(bug)));
+		
 		bugfixerDiagnostics.set(uri, diagnostics);
 	});
-	
 }
 
 function createDiagnostic(bug:Bug): vscode.Diagnostic {
