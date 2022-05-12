@@ -6,10 +6,9 @@ export class Bug {
 		public readonly line: number,
 		public readonly column:	number,
 		public readonly file: string,
+		public readonly procedure: string,
 		public readonly src_line: number = 0,
-		public readonly src_column: number = 0,
 		public readonly sink_line: number = 0,
-		public readonly sink_column: number = 0
 	) {}
 }
 
@@ -20,10 +19,21 @@ export class SaverBug {
 		public readonly qualifier: string,
 		public readonly line: number,
 		public readonly column:	number,
-		public readonly file: string
+		public readonly file: string,
+		public readonly procedure: string
 	) {}
 
 	public static toBug(saverBug: SaverBug): Bug {
-		return new Bug(saverBug.kind, saverBug.bug_type, saverBug.qualifier, saverBug.line, saverBug.column, saverBug.file);
+		var arr = saverBug.qualifier.match(/.*at line (\d+).*line (\d+).*/);
+
+		var src = 0;
+		var sink = 0;
+
+		if (arr?.length === 3) {
+			src = +arr[1];
+        	sink = +arr[2];
+		} 
+
+		return new Bug(saverBug.kind, saverBug.bug_type, saverBug.qualifier, saverBug.line, saverBug.column, saverBug.file, saverBug.procedure, src, sink);
 	}
 }

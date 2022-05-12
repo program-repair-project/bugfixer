@@ -35,7 +35,6 @@ export function refreshDiagnostics(bugfixerDiagnostics: vscode.DiagnosticCollect
 		bugfixerDiagnostics.delete(uri);
 
 		bugs.map(bug => diagnostics.push(createDiagnostic(bug)));
-		
 		bugfixerDiagnostics.set(uri, diagnostics);
 	});
 }
@@ -45,8 +44,11 @@ function createDiagnostic(bug:Bug): vscode.Diagnostic {
 	const range = new vscode.Range(bug.line - 1, bug.column - 1, bug.line - 1, 999);
 
 	const diagnostic = new vscode.Diagnostic(range, bug.message,
-		vscode.DiagnosticSeverity.Warning);
+		vscode.DiagnosticSeverity.Error);
+
 	diagnostic.code = bug.name;
+	diagnostic.tags = [bug.src_line, bug.sink_line];
+	
 	return diagnostic;
 }
 
