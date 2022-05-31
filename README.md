@@ -1,70 +1,37 @@
-# bugfixerj README
+# bugfixer README
 
-This is the README for your extension "bugfixer". After writing up a brief description, we recommend including the following sections.
+SW 오류 자동 수정 엔진 실행 및 결과 확인 그리고 패치기능이 포함된 VS Code 확장 프로그램입니다.
 
-## Features
+## 기능
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+다음 기능을 포함합니다.
+- Saver 엔진 실행, 패치 생성 및 적용
+- NPEX를 이용한 패치 생성 및 적용
 
-For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
+## 준비물
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Saver 실행 준비
+  - Virtual Box
+  - Saver VM
 
-## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## 제약사항
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Saver 관련 기능만 실행가능합니다.
+- NPEX는 준비 중입니다.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.2
 
-### 1.0.0
+- Saver 실행, 패치 생성 기능 추가
 
-Initial release of ...
+### 관련 정보
 
-### 1.0.1
+* 개발 가이드
+  * [VS Code Extension 개발 가이드](https://code.visualstudio.com/api)
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+* 엔진
+  * [Saver](https://github.com/kupl/SAVER_public)
+  * [NPEX](https://github.com/kupl/npex)
