@@ -3,14 +3,14 @@
 import * as vscode from 'vscode';
 
 import { BugfixerController } from './engine_controller';
+import { CodelensProvider } from './results/codelensProvider';
 import { subscribeToDocumentChanges } from './results/diagnostics';
 import { Patcher, registerCommand } from './results/codeActions';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+
+var disposables: vscode.Disposable[] = [];
+
 export function activate(context: vscode.ExtensionContext) {
-	
-		
 	let bugfixer = new BugfixerController(context);
 	context.subscriptions.push(bugfixer);
 
@@ -25,7 +25,16 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 	registerCommand(context);
+
+	let codelensProvider = new CodelensProvider(context);
+
+  vscode.languages.registerCodeLensProvider("*", codelensProvider);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() { 
+	if (disposables) {
+		disposables.forEach(item => item.dispose());
+	}
+	disposables = [];
+}

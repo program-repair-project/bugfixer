@@ -110,7 +110,7 @@ export class SaverEngine extends Engine {
             if (arr?.length == 7) {
                 const method = arr[1];
                 const contents = arr[2] + arr[3] + arr[4];
-                const line = +arr[5];
+                const line = +arr[5] + 1;
                 const column = +arr[6];
 
                 // generate json item
@@ -141,7 +141,7 @@ export class SaverEngine extends Engine {
     }
 
     public generate_patched_file(key: string) {
-        const file = key.split("___")[0];
+        const file = key.split("___")[1];
         const cwd = util.getCwd();
 
         const patchedPath = path.join(cwd, "patched");
@@ -156,7 +156,7 @@ export class SaverEngine extends Engine {
         const data: SaverPatch = JSON.parse(jsonString);
 
         const src = path.join(cwd, file);
-        const dst = path.join(cwd, "patched", file);
+        const dst = path.join(cwd, "patched", key);
 
         
         switch (data.method) {
@@ -177,7 +177,7 @@ export class SaverEngine extends Engine {
     }
 
     public get_error_key(bug: Bug): string {
-        return `${bug.file}___${bug.src_line}_${bug.sink_line}`;
+        return `${bug.src_line}_${bug.sink_line}___${bug.file}`;
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
