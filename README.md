@@ -15,6 +15,17 @@ SW 오류 자동 수정 엔진 실행 및 결과 확인 그리고 패치기능�
   - Virtual Box
   - Saver VM
 
+## 빌드 및 디버그
+
+- 컴파일
+
+```
+git clone git@github.com:chjkw/bugfixer2.git
+cd bugfixer2
+npm install
+```
+- vscode에서 폴더 열기
+- F5를 눌러 실행
 
 ## 제약사항
 
