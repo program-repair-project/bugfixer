@@ -13,6 +13,7 @@ export abstract class Engine {
     abstract get_file_bugs_map(): Map<string, Bug[]>;
     abstract get_patch_cmd(key: string): string[];
     abstract make_patch(key: string): void;
+    abstract apply_patch(key: string): void;
     abstract get_error_key(bug: Bug): string;
     
     constructor(name:string, analyze_cmd:string, output_path:string){

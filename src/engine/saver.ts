@@ -5,6 +5,7 @@ import * as child_process from "child_process";
 
 import { Engine } from "./engine";
 import { Bug, SaverBug } from "../dto/bug";
+import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
 import { maxHeaderSize } from 'http';
 
@@ -105,8 +106,23 @@ export class SaverEngine extends Engine {
         );
 
         saver.stderr.on("data", data => {
-            let log: string = data.toString();
-            result += log;
+            var arr = data.toString().match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
+            if (arr?.length == 7) {
+                const method = arr[1];
+                const contents = arr[2] + arr[3] + arr[4];
+                const line = +arr[5];
+                const column = +arr[6];
+
+                // generate json item
+                const patchDataJson = {
+                    "method": method,
+                    "contents": contents,
+                    "line": line,
+                    "column": column
+                }
+                
+                result += JSON.stringify(patchDataJson);
+            }
         });
 
         saver.on("exit", (code) => {
@@ -118,12 +134,50 @@ export class SaverEngine extends Engine {
             const patchFile = path.join(patchPath, `${errorKey}.json`);
             fs.writeFileSync(patchFile, result, 'utf8');
 
+            this.generate_patched_file(errorKey);
+
             vscode.window.showInformationMessage("패치 생성이 완료되었습니다.");
         });
     }
 
+    public generate_patched_file(key: string) {
+        const file = key.split("___")[0];
+        const cwd = util.getCwd();
+
+        const patchedPath = path.join(cwd, "patched");
+        
+        if(!util.pathExists(patchedPath))
+            fs.mkdirSync(patchedPath);
+
+        const patchPath = path.join(cwd, "patches");
+        const patchFile = path.join(patchPath, `${key}.json`);
+
+        const jsonString = fs.readFileSync(patchFile, 'utf-8');
+        const data: SaverPatch = JSON.parse(jsonString);
+
+        const src = path.join(cwd, file);
+        const dst = path.join(cwd, "patched", file);
+
+        
+        switch (data.method) {
+            case "Insert":
+                util.insertFromFile(src, dst, data.line, data.contents);
+                break;
+            case "Replace":
+                util.replaceFromFile(src, dst, data.line, data.contents);
+                break;
+            case "Delete":
+                util.deleteFromFile(src, dst, data.line, "");
+                break;
+        }
+    }
+
+    public apply_patch(key: string): void {
+        
+    }
+
     public get_error_key(bug: Bug): string {
-        return `${bug.file}_${bug.src_line}_${bug.sink_line}`;
+        return `${bug.file}___${bug.src_line}_${bug.sink_line}`;
     }
 
     private get_errorData_path_by_key(errorKey: string): string {

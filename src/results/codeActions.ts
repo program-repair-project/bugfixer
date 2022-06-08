@@ -2,21 +2,40 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { EngineEnv } from '../engine/engine_env';
 
-const COMMAND = 'bugfixer.genPatch';
+const GEN_PATCH_COMMAND = 'bugfixer.genPatch';
+const DIFF_PATCH_COMMAND = 'bugfixer.diffPatch';
+const APPLY_PATCH_COMMAND = 'bugfixer.applyPatch';
 
 export function registerCommand(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
-        vscode.commands.registerCommand(COMMAND, (key) => generatePatch(key))
-    );
+	context.subscriptions.push(
+			vscode.commands.registerCommand(GEN_PATCH_COMMAND, (key) => generatePatch(key))
+	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand(DIFF_PATCH_COMMAND, (key) => diffPatch(key))
+	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand(APPLY_PATCH_COMMAND, (key) => applyPatch(key))
+	);
 }
 
 export function generatePatch(key: string): void {
 	EngineEnv.getInstance().get_patch_maker().make_patch(key);
 }
 
+export function diffPatch(key: string): void {
+	//EngineEnv.getInstance().get_patch_maker().make_patch(key);
+
+}
+
+export function applyPatch(key: string): void {
+	EngineEnv.getInstance().get_patch_maker().make_patch(key);
+}
+
 export class Patcher implements vscode.CodeActionProvider {
 
 	public static readonly providedCodeActionKinds = [
+		vscode.CodeActionKind.QuickFix,
+		vscode.CodeActionKind.QuickFix,
 		vscode.CodeActionKind.QuickFix
 	];
 
@@ -28,7 +47,6 @@ export class Patcher implements vscode.CodeActionProvider {
 	}
 
 	private createCommandCodeAction(document: vscode.TextDocument, diagnostic: vscode.Diagnostic): vscode.CodeAction {
-	
 		const patch_maker = EngineEnv.getInstance().get_patch_maker();
 		var src = 0;
 		var sink = 0;
@@ -36,10 +54,10 @@ export class Patcher implements vscode.CodeActionProvider {
 			src = diagnostic.tags[0];
 			sink = diagnostic.tags[1];
 		}
-		const errorKey = `${path.basename(document.fileName)}_${src}_${sink}`;
+		const errorKey = `${path.basename(document.fileName)}___${src}_${sink}`;
 		const action = new vscode.CodeAction(`${patch_maker.name}: 패치 만들기`, vscode.CodeActionKind.QuickFix);
 
-		action.command = { command: COMMAND, arguments: [errorKey], title: '패치 생성', tooltip: '현재 오류에 대한 패치를 생성합니다.' };
+		action.command = { command: GEN_PATCH_COMMAND, arguments: [errorKey], title: '패치 생성', tooltip: '현재 오류에 대한 패치를 생성합니다.' };
 		action.diagnostics = [diagnostic];
 		action.isPreferred = true;
 		return action;

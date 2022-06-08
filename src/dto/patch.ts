@@ -1,4 +1,3 @@
-import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from 'constants';
 import * as vscode from 'vscode'
 
 export enum PatchType {Insert, Delete, Replace};
