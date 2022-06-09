@@ -44,7 +44,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         if (range) {
           const lens = new vscode.CodeLens(range);
           lens.command = {
-            title: `패치 미리보기 (${src})`,
+            title: `패치 미리보기 (${src} 라인에서 할당됨)`,
             tooltip: `패치 미리보기: ${diagnostic.message}`,
             command: "vscode.diff",
             arguments: [vscode.Uri.file(file), vscode.Uri.file(patched)]
