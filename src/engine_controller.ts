@@ -31,8 +31,8 @@ export class BugfixerController {
 
   protected analyse(uri: vscode.Uri) {
     const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
-    analyzer.build_cmd = "make release";
-    analyzer.clean_build_cmd = "make clean release"
+    analyzer.build_cmd = "make";
+    analyzer.clean_build_cmd = "make"
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);
 
@@ -79,17 +79,14 @@ export class BugfixerController {
           });
 
           bugfixer.on("exit", (code) => {
-            if (code === 0) {
-              progress.report({ increment: 100, message: "실행 완료" });
-              vscode.window.showInformationMessage(`${analyzer.name} 실행이 완료되었습니다.`);
-              vscode.commands.executeCommand('bugfixer.refreshBugs');
-            } else if (canceled) {
+            if (canceled) {
               vscode.window.showInformationMessage(`${analyzer.name} 실행이 취소되었습니다.`);
               bugfixer.kill();
             }
             else {
-              progress.report({ increment: 100, message: "실행 실패" });
-              vscode.window.showErrorMessage(`${analyzer.name} 실행이 실패했습니다.\n${errmsg}`);
+              progress.report({ increment: 100, message: "실행 완료" });
+              vscode.window.showInformationMessage(`${analyzer.name} 실행이 완료되었습니다.`);
+              vscode.commands.executeCommand('bugfixer.refreshBugs');
             }
 
             resolve(0);
