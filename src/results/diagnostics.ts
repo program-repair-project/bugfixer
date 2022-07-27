@@ -19,7 +19,7 @@ import { EngineEnv } from '../engine/engine_env';
  * @param bugfixerDiagnostics diagnostic collection
  */
 export function refreshDiagnostics(bugfixerDiagnostics: vscode.DiagnosticCollection): void {
-	// read from infer-out/bugs.txt
+	// read from infer-out/report.json
 	const patch_maker = EngineEnv.getInstance().get_patch_maker();
 
 	const results = patch_maker.get_file_bugs_map();

@@ -8,6 +8,7 @@ import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
 import { maxHeaderSize } from 'http';
+import { escape } from 'querystring';
 
 export class SaverEngine extends Engine {
     protected _report_file: string = "report.json";
@@ -86,7 +87,7 @@ export class SaverEngine extends Engine {
 
         try {
             if (!util.pathExists(errorDataPath)) {
-                fs.mkdirSync(errorDataPath);
+                fs.mkdirSync(errorDataPath, { recursive: true });
             }
 
             fs.writeFileSync(errorDataFile, JSON.stringify(errorDataJson, null, 2), 'utf8');
@@ -141,7 +142,7 @@ export class SaverEngine extends Engine {
     }
 
     public generate_patched_file(key: string) {
-        const file = key.split("___")[1];
+        const file = key.split("___")[1].replaceAll("__", "/");
         const cwd = util.getCwd();
 
         const patchedPath = path.join(cwd, "patched");
@@ -177,7 +178,7 @@ export class SaverEngine extends Engine {
     }
 
     public get_error_key(bug: Bug): string {
-        return `${bug.src_line}_${bug.sink_line}___${bug.file}`;
+        return `${bug.src_line}_${bug.sink_line}___${bug.file.replaceAll('/', '__')}`;
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
