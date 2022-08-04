@@ -7,16 +7,18 @@ import { Engine } from "./engine";
 import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
-import { maxHeaderSize } from 'http';
-import { escape } from 'querystring';
+import * as log_util from "../common/logger";
 
 export class SaverEngine extends Engine {
     protected _report_file: string = "report.json";
     protected _patch_input_path: string = "patch_inputs";
     protected _patch_input_file: string = "patch_input.json";
 
+    private logger: log_util.Logger;
+
     constructor() {
         super("Saver", "infer", "infer-out");
+        this.logger = new log_util.Logger("Saver");
     }
 
     public get_incremental_cmd(): string[] {
@@ -92,7 +94,7 @@ export class SaverEngine extends Engine {
 
             fs.writeFileSync(errorDataFile, JSON.stringify(errorDataJson, null, 2), 'utf8');
         } catch (error) {
-            console.log('An error has occurred ', error);
+            this.logger.error('An error has occurred: ' + error);
         }
     }
 
@@ -158,7 +160,6 @@ export class SaverEngine extends Engine {
 
         const src = path.join(cwd, file);
         const dst = path.join(cwd, "patched", key);
-
         
         switch (data.method) {
             case "Insert":

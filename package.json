@@ -19,6 +19,24 @@
 				"command": "bugfixer.analyze_all",
 				"title": "Bugfixer 실행"
 			}
+		],
+		"configuration": [
+			{
+				"type": "object",
+				"title": "Bugfixer 설정",
+				"properties": {
+					"bugfixer.logLevel": {
+						"type": "string",
+						"default": "trace",
+						"enum": [
+							"info",
+							"debug",
+							"trace"
+						],
+						"description": "Log Level"
+					}
+				}
+			}
 		]
 	},
 	"scripts": {
@@ -37,6 +55,7 @@
 	},
 	"dependencies": {
 		"install": "^0.13.0",
-		"npm": "^8.15.0"
+		"npm": "^8.15.0",
+		"winston": "^3.8.1"
 	}
 }
