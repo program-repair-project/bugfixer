@@ -25,7 +25,7 @@
 				"type": "object",
 				"title": "Bugfixer 설정",
 				"properties": {
-					"bugfixer.logLevel": {
+					"bugfixer.log_level": {
 						"type": "string",
 						"default": "trace",
 						"enum": [
