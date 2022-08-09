@@ -1,20 +1,17 @@
 import {
   commands,
-  window,
   Disposable,
-  ProgressLocation
 } from "vscode";
 
-import * as child_process from "child_process";
 import * as vscode from "vscode";
 import * as path from 'path';
+import * as fs from 'fs';
 
 import { Engine } from "./engine/engine";
 import { EngineEnv } from "./engine/engine_env";
-
 import * as util from "./common/util";
 import * as log_util from "./common/logger";
-import * as fs from 'fs';
+import * as wc from "./ui/window_controller";
 
 export class BugfixerController {
   private _commandForAnalysis: Disposable;
@@ -49,71 +46,22 @@ export class BugfixerController {
     vscode.window.showInformationMessage(`${analyzer.analyze_cmd} ${args.join(" ")}`);
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
 
-    window.withProgress({
-      location: ProgressLocation.Notification,
-      title: `${analyzer.name} 실행`,
-      cancellable: true
-    },
-      async (progress, token) => {
-        let canceled = false;
+    const stderrHandler = (data:any) => {
+      const progress = data.progressv;
+      const log = data.log;
 
-        const p = new Promise(resolve => {
-          let result = "";
-          let errmsg = "";
+      if (log.includes("Starting Process...")) {
+        progress.report({ message: `${analyzer.name} 실행 중` });
+      }
+    }
+    
+    const stdoutHandler = (data:any) => {}
+    const exitHandler = (data:any) => { 
+      vscode.commands.executeCommand('bugfixer.refreshBugs'); 
+    }
 
-          this.logger.debug("run from: " + util.getCwd());
-          this.logger.debug(`running cmd: ${analyzer.analyze_cmd} ${args.join(' ')}`);
+    const windowsController = new wc.WindowController(this.logger, "");
+    windowsController.runWithProgress(`${analyzer.name} 실행`, analyzer.name, analyzer.analyze_cmd, args, stdoutHandler, stderrHandler, exitHandler);
 
-          let bugfixer = child_process.spawn(
-            analyzer.analyze_cmd,
-            args,
-            { cwd: util.getCwd() }
-          );
-
-          bugfixer.stderr.on("data", data => {
-            let log: string = data.toString();
-            errmsg += log;
-
-            this.logger.debug(log);
-
-            if (log.includes("Starting analysis...")) {
-              progress.report({ message: `${analyzer.name} 분석 중` });
-            }
-          });
-
-          bugfixer.stdout.on("data", data => {
-            let log: string = data.toString();
-            result += data.toString();
-
-            this.logger.debug(log);
-
-            progress.report({ message: log });
-          });
-
-          bugfixer.on("exit", (code, signal) => {
-            if (code === 0) {
-              progress.report({ increment: 100, message: "실행 완료" });
-              vscode.window.showInformationMessage(`${analyzer.name} 실행이 완료되었습니다.`);
-              this.logger.info("Done.");
-              vscode.commands.executeCommand('bugfixer.refreshBugs');
-            }
-            else if (canceled) {
-              vscode.window.showInformationMessage(`${analyzer.name} 실행이 취소되었습니다.`);
-              this.logger.error("Canceled.");
-              bugfixer.kill();
-            }
-            else {
-
-              this.logger.info(`Failed. Exitcode: ${code?.toString() ?? ""}`);
-              progress.report({ increment: 100, message: "실행 실패" });
-              vscode.window.showErrorMessage(`${analyzer.name} 실행에 실패했습니다.`);
-            }
-
-            resolve(0);
-          });
-        });;
-
-        return p;
-      });
   }
 }

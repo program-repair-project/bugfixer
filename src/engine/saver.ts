@@ -8,6 +8,8 @@ import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
+import * as wc from "../ui/window_controller";
+import { stderr } from 'process';
 
 export class SaverEngine extends Engine {
     protected _report_file: string = "report.json";
@@ -93,23 +95,23 @@ export class SaverEngine extends Engine {
             }
 
             fs.writeFileSync(errorDataFile, JSON.stringify(errorDataJson, null, 2), 'utf8');
+
+            this.logger.debug(`패치 생성 준비: ${errorDataFile}`);
+
         } catch (error) {
             this.logger.error('An error has occurred: ' + error);
         }
     }
 
     public make_patch(errorKey: string): void {
-        let result = "";
+        let patch = "";
         const cwd = util.getCwd();
 
-        let saver = child_process.spawn(
-            this.analyze_cmd,
-            this.get_patch_cmd(errorKey),
-            { cwd: cwd }
-        );
+        const windowController = new wc.WindowController(this.logger, {success: false, patch: ""});
 
-        saver.stderr.on("data", data => {
-            var arr = data.toString().match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
+        const stderrHandler = (data: any) => {
+            const log = data.log.toString();
+            var arr = log.match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
             if (arr?.length == 7) {
                 const method = arr[1];
                 const contents = (arr[2] + arr[3] + arr[4]).replace("true", "TRUE") + ";";
@@ -124,23 +126,35 @@ export class SaverEngine extends Engine {
                     "column": column
                 }
                 
-                result += JSON.stringify(patchDataJson);
+                windowController.prop.patch += JSON.stringify(patchDataJson);
             }
-        });
 
-        saver.on("exit", (code) => {
-            const patchPath = path.join(cwd, "patches");
-            
-            if(!util.pathExists(patchPath))
-                fs.mkdirSync(patchPath);
+            if(log.includes("PATCH SUCCEED")) windowController.prop.success = true;
+        }
+        const stdoutHandler = (data: any) => {
+        }
+        const exitHandler = (code: any) => {
+            if (code === 0 || windowController.prop.success) {
+                try {
+                    const patchPath = path.join(cwd, "patches");
+                
+                    if(!util.pathExists(patchPath))
+                        fs.mkdirSync(patchPath);
 
-            const patchFile = path.join(patchPath, `${errorKey}.json`);
-            fs.writeFileSync(patchFile, result, 'utf8');
+                    const patchFile = path.join(patchPath, `${errorKey}.json`);
+                    fs.writeFileSync(patchFile, patch, 'utf8');
 
-            this.generate_patched_file(errorKey);
+                    this.generate_patched_file(errorKey);
 
-            vscode.window.showInformationMessage("패치 생성이 완료되었습니다.");
-        });
+                    vscode.window.showInformationMessage("패치 생성이 완료되었습니다.",);
+                } catch (e: any) {
+                    this.logger.error(e);
+                    vscode.window.showErrorMessage(e);
+                }
+            }
+        }
+
+        windowController.runWithProgress('패치 생성', this.name, this.analyze_cmd, this.get_patch_cmd(errorKey), stdoutHandler, stderrHandler, exitHandler);
     }
 
     public generate_patched_file(key: string) {
@@ -156,6 +170,7 @@ export class SaverEngine extends Engine {
         const patchFile = path.join(patchPath, `${key}.json`);
 
         const jsonString = fs.readFileSync(patchFile, 'utf-8');
+        this.logger.error(jsonString);
         const data: SaverPatch = JSON.parse(jsonString);
 
         const src = path.join(cwd, file);
