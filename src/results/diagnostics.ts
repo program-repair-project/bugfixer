@@ -23,23 +23,22 @@ export function refreshDiagnostics(bugfixerDiagnostics: vscode.DiagnosticCollect
 	const patch_maker = EngineEnv.getInstance().get_patch_maker();
 
 	const results = patch_maker.get_file_bugs_map();
-
+	
 	if(results.size === 0) return;
 
 	const cwd = util.getCwd();
 
 	results.forEach((bugs, file) => {
 		const diagnostics: vscode.Diagnostic[] = [];
-
 		const uri = vscode.Uri.file(path.join(cwd, file));
 		bugfixerDiagnostics.delete(uri);
 
-		bugs.map(bug => diagnostics.push(createDiagnostic(bug)));
+		bugs.map(bug => diagnostics.push(createDiagnostic(uri, bug)));
 		bugfixerDiagnostics.set(uri, diagnostics);
 	});
 }
 
-function createDiagnostic(bug:Bug): vscode.Diagnostic {
+function createDiagnostic(uri: vscode.Uri, bug:Bug): vscode.Diagnostic {
 	// create range that represents, where in the document the word is
 	const range = new vscode.Range(bug.line - 1, bug.column - 1, bug.line - 1, 999);
 
@@ -48,6 +47,17 @@ function createDiagnostic(bug:Bug): vscode.Diagnostic {
 
 	diagnostic.code = bug.name;
 	diagnostic.tags = [bug.src_line, bug.sink_line];
+	
+	if(bug.name == 'MEMORY_LEAK') {
+		const navigationList = [{line: bug.src_line, msg: "에서 할당 됨"}, {line: bug.sink_line, msg: "에서 오류 발생"}];
+		
+		diagnostic.relatedInformation = navigationList.map((navi) => {
+			return new vscode.DiagnosticRelatedInformation(
+				new vscode.Location(uri,
+						new vscode.Range(new vscode.Position(navi.line - 1, 0), new vscode.Position(navi.line - 1, 999))),
+				navi.msg);
+		});
+	}
 	
 	return diagnostic;
 }
