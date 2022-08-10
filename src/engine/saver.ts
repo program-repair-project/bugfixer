@@ -165,13 +165,14 @@ export class SaverEngine extends Engine {
 
         const src = path.join(cwd, file);
         const dst = path.join(patchedPath, key);
+        const contents = `${" ".repeat(data.column)}${data.contents}`;
         
         switch (data.method) {
             case "Insert":
-                util.insertFromFile(src, dst, data.line, data.contents);
+                util.insertFromFile(src, dst, data.line, contents);
                 break;
             case "Replace":
-                util.replaceFromFile(src, dst, data.line, data.contents);
+                util.replaceFromFile(src, dst, data.line, contents);
                 break;
             case "Delete":
                 util.deleteFromFile(src, dst, data.line, "");
