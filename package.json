@@ -17,7 +17,11 @@
 		"commands": [
 			{
 				"command": "bugfixer.analyze_all",
-				"title": "Bugfixer 실행"
+				"title": "Bugfixer 실행: 처음부터"
+			},
+			{
+				"command": "bugfixer.analyze_continue",
+				"title": "Bugfixer 실행: 이어서"
 			}
 		],
 		"configuration": [

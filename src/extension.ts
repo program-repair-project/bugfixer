@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 
 import { EngineController } from './engine_controller';
 import { CodelensProvider } from './results/codelensProvider';
-import { subscribeToDocumentChanges } from './results/diagnostics';
+import { DiagnosticsProvider } from './results/diagnostics';
 import { Patcher, registerCommand } from './results/codeActions';
 
 
@@ -14,10 +14,9 @@ export function activate(context: vscode.ExtensionContext) {
 	let bugfixerController = new EngineController(context);
 	context.subscriptions.push(bugfixerController);
 
-	const bugfixerDiagnostics = vscode.languages.createDiagnosticCollection("bugfixer");
-	context.subscriptions.push(bugfixerDiagnostics);
+	const diagnostics = new DiagnosticsProvider(context);
 
-	subscribeToDocumentChanges(context, bugfixerDiagnostics);
+	diagnostics.subscribeToDocumentChanges(context);
 
 	context.subscriptions.push(
 		vscode.languages.registerCodeActionsProvider('c', new Patcher(), {

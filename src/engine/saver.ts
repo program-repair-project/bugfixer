@@ -10,13 +10,11 @@ import * as util from '../common/util';
 import * as log_util from "../common/logger";
 
 export class SaverEngine extends Engine {
-    protected _report_file: string = "report.json";
-    protected _patch_input_file: string = "patch_input.json";
-
     private logger: log_util.Logger;
 
     constructor() {
         super("Saver", "infer", "infer-out");
+        this.report_file = "report.json";
         this.logger = new log_util.Logger("Saver");
     }
 
@@ -37,7 +35,7 @@ export class SaverEngine extends Engine {
 
     public get_file_bugs_map(): Map<string, Bug[]> {
         const cwd = util.getCwd();
-        const reportPath = path.join(cwd, this.output_path, this._report_file);
+        const reportPath = path.join(cwd, this.output_path, this.report_file);
 
         const fileBugMap = new Map<string, Bug[]>();
 

@@ -6,7 +6,7 @@ export abstract class Engine {
     private _analyze_cmd: string;
     private _build_cmd: string = "";
     private _clean_build_cmd: string = "";
-    protected _report_file: string = "";
+    private _report_file: string = "";
     protected _patch_path: string = "";
     private _patch_data_path: string = "";
     private _patch_input_path: string = "";
@@ -40,6 +40,14 @@ export abstract class Engine {
 
     public set output_path(value: string) {
         this._output_path = value;
+    }
+
+    public get report_file(): string {
+        return this._report_file;
+    }
+
+    public set report_file(value: string) {
+        this._report_file = value;
     }
 
     public get analyze_cmd(): string {

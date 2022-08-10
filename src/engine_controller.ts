@@ -15,13 +15,19 @@ import * as wc from "./ui/window_controller";
 import * as constants from "./common/constants";
 
 export class EngineController {
-  private _commandForAnalysis: Disposable;
+  private _commandForAnalysisAll: Disposable;
+  private _commandForAnalysisContinue: Disposable;
   private logger: log_util.Logger;
 
   public constructor(private context: vscode.ExtensionContext) {
-    this._commandForAnalysis = commands.registerCommand("bugfixer.analyze_all",
+    this._commandForAnalysisAll = commands.registerCommand("bugfixer.analyze_all",
       (uri: vscode.Uri) => {
-        this.analyse(uri);
+        this.analyze_all(uri);
+      });
+
+      this._commandForAnalysisContinue = commands.registerCommand("bugfixer.analyze_continue",
+      (uri: vscode.Uri) => {
+        this.analyze_continue(uri);
       });
 
     vscode.commands.registerCommand(constants.MAKE_PATCH_COMMAND, (key) => this.make_patch(key))
@@ -29,17 +35,35 @@ export class EngineController {
   }
 
   public dispose() {
-    this._commandForAnalysis.dispose();
+    this._commandForAnalysisAll.dispose();
+    this._commandForAnalysisContinue.dispose();
   }
 
-  protected analyse(uri: vscode.Uri) {
+  protected analyze_all(uri: vscode.Uri) {
     const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
     analyzer.build_cmd = "make";
-    analyzer.clean_build_cmd = "make"
+    analyzer.clean_build_cmd = "make clean all"
+    let args: string[] = analyzer.get_analysis_cmd();
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);
+    if (util.pathExists(output_path)) {
+      fs.rmdirSync(output_path, { recursive: true });
+    }
 
-    let args: string[] = analyzer.get_analysis_cmd();
+    this.analyze(uri, analyzer, args);
+  }
+
+  protected analyze_continue(uri: vscode.Uri) {
+    const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
+    analyzer.build_cmd = "make";
+    analyzer.clean_build_cmd = "make clean all"
+    let args: string[] = analyzer.get_incremental_cmd();
+
+    this.analyze(uri, analyzer, args);
+  }
+
+  protected analyze(uri: vscode.Uri, analyzer: Engine, args: string[]) {
+    const output_path = path.join(util.getCwd(), analyzer.output_path);
 
     vscode.window.showInformationMessage(`${analyzer.analyze_cmd} ${args.join(" ")}`);
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
@@ -59,6 +83,14 @@ export class EngineController {
     }
 
     const windowController = new wc.WindowController(this.logger, "");
+    
+    // remove previous restuls
+    const reportFile = path.join(util.getCwd(), analyzer.output_path, analyzer.report_file);
+    if(util.pathExists(reportFile))
+      fs.unlinkSync(reportFile);
+
+    vscode.commands.executeCommand("bugfixer.clearDiag");
+    vscode.commands.executeCommand('bugfixer.refreshBugs'); 
     windowController.runWithProgress(`${analyzer.name} 실행`, analyzer.name, analyzer.analyze_cmd, args, stdoutHandler, stderrHandler, exitHandler);
   }
 
