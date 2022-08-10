@@ -111,7 +111,7 @@ export class SaverEngine extends Engine {
 
         const stderrHandler = (data: any) => {
             const log = data.log.toString();
-            var arr = log.match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
+            var arr = log.match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9->]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
             if (arr?.length == 7) {
                 const method = arr[1];
                 const contents = (arr[2] + arr[3] + arr[4]).replace("true", "TRUE") + ";";
@@ -126,7 +126,7 @@ export class SaverEngine extends Engine {
                     "column": column
                 }
                 
-                windowController.prop.patch += JSON.stringify(patchDataJson);
+                patch += JSON.stringify(patchDataJson);
             }
 
             if(log.includes("PATCH SUCCEED")) windowController.prop.success = true;
@@ -145,8 +145,6 @@ export class SaverEngine extends Engine {
                     fs.writeFileSync(patchFile, patch, 'utf8');
 
                     this.generate_patched_file(errorKey);
-
-                    vscode.window.showInformationMessage("패치 생성이 완료되었습니다.",);
                 } catch (e: any) {
                     this.logger.error(e);
                     vscode.window.showErrorMessage(e);
@@ -189,8 +187,10 @@ export class SaverEngine extends Engine {
         }
     }
 
-    public apply_patch(key: string): void {
-        
+    public apply_patch(src: string, patched: string): void {
+        fs.renameSync(patched, src);
+        // this.generate_patched_file(key);
+        // 패치된 파일을 원본 파일과 바꾼다.
     }
 
     public get_error_key(bug: Bug): string {
