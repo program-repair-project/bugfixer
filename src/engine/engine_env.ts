@@ -16,7 +16,6 @@ export class EngineEnv {
     this.validator = new SaverEngine();
 
     vscode.commands.registerCommand(constans.APPLY_PATCH_COMMAND, (src, patched) => this.patch_maker.apply_patch(src, patched));
-    vscode.commands.registerCommand(constans.GEN_PATCH_COMMAND, (key) => this.patch_maker.make_patch(key));
   }
   
   public static getInstance () { 

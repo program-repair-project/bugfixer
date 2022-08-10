@@ -84,7 +84,7 @@ export class BugfixerController {
       const patchFile = path.join(patchDataPath, `${key}.log`);
       fs.writeFileSync(patchFile, patch_maker_result, 'utf8');
       
-      vscode.commands.executeCommand(constants.GEN_PATCH_COMMAND, key); 
+      patch_maker.make_patch(key);
     }
 
     const windowController = new wc.WindowController(this.logger, "");
