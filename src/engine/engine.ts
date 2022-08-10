@@ -7,6 +7,10 @@ export abstract class Engine {
     private _build_cmd: string = "";
     private _clean_build_cmd: string = "";
     protected _report_file: string = "";
+    protected _patch_path: string = "";
+    private _patch_data_path: string = "";
+    private _patch_input_path: string = "";
+    private _patched_path: string = "";
 
     abstract get_analysis_cmd(): string[];
     abstract get_incremental_cmd(): string[];
@@ -20,6 +24,10 @@ export abstract class Engine {
         this._name = name;
         this._analyze_cmd = analyze_cmd;
         this._output_path = output_path;
+        this._patch_path = `${this._output_path}/${this._name}/patches`;
+        this._patch_data_path = `${this._patch_path}/data`;
+        this._patch_input_path = `${this._patch_path}/input`;
+        this._patched_path = `${this._patch_path}/patched`;
     }
     
     public get name() {
@@ -50,5 +58,17 @@ export abstract class Engine {
     }
     public set clean_build_cmd(value: string) {
         this._clean_build_cmd = value;
+    }
+    public get patch_path(): string {
+        return this._patch_path;
+    }
+    public get patch_data_path(): string {
+        return this._patch_data_path;
+    }
+    public get patch_input_path(): string {
+        return this._patch_input_path;
+    }
+    public get patched_path(): string {
+        return this._patched_path;
     }
 }

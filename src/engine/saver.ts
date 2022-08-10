@@ -8,12 +8,9 @@ import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
-import * as wc from "../ui/window_controller";
-import { stderr } from 'process';
 
 export class SaverEngine extends Engine {
     protected _report_file: string = "report.json";
-    protected _patch_input_path: string = "patch_inputs";
     protected _patch_input_file: string = "patch_input.json";
 
     private logger: log_util.Logger;
@@ -53,7 +50,7 @@ export class SaverEngine extends Engine {
         const bugs: Bug[] = data.filter(d => d.kind === "ERROR").map(d => SaverBug.toBug(d));
         const files = Array.from(new Set(bugs.map(b => b.file)));
 
-        const patch_input_path = path.join(cwd, this._patch_input_path);
+        const patch_input_path = path.join(cwd, this.patch_input_path);
         
         if(util.pathExists(patch_input_path))
             fs.rmdirSync(patch_input_path, { recursive: true });
@@ -107,10 +104,14 @@ export class SaverEngine extends Engine {
         let patch = "";
         const cwd = util.getCwd();
 
-        const windowController = new wc.WindowController(this.logger, {success: false, patch: ""});
+        const patch_data_file = path.join(cwd, this.patch_data_path, `${errorKey}.log`);
 
-        const stderrHandler = (data: any) => {
-            const log = data.log.toString();
+        if(!util.pathExists(patch_data_file)) {
+            this.logger.error(`파일이 없습니다: ${patch_data_file}`);
+            return;
+        }
+
+        fs.readFileSync(patch_data_file).toString().split("\n").forEach((log) => {
             var arr = log.match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9->]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
             if (arr?.length == 7) {
                 const method = arr[1];
@@ -128,43 +129,34 @@ export class SaverEngine extends Engine {
                 
                 patch += JSON.stringify(patchDataJson);
             }
+        });
 
-            if(log.includes("PATCH SUCCEED")) windowController.prop.success = true;
+        try {
+            const patchPath = path.join(cwd, this.patch_path);
+        
+            if(!util.pathExists(patchPath))
+                fs.mkdirSync(patchPath);
+
+            const patchFile = path.join(patchPath, `${errorKey}.json`);
+            fs.writeFileSync(patchFile, patch, 'utf8');
+
+            this.generate_patched_file(errorKey);
+        } catch (e: any) {
+            this.logger.error(e);
+            vscode.window.showErrorMessage(e);
         }
-        const stdoutHandler = (data: any) => {
-        }
-        const exitHandler = (code: any) => {
-            if (code === 0 || windowController.prop.success) {
-                try {
-                    const patchPath = path.join(cwd, "patches");
-                
-                    if(!util.pathExists(patchPath))
-                        fs.mkdirSync(patchPath);
-
-                    const patchFile = path.join(patchPath, `${errorKey}.json`);
-                    fs.writeFileSync(patchFile, patch, 'utf8');
-
-                    this.generate_patched_file(errorKey);
-                } catch (e: any) {
-                    this.logger.error(e);
-                    vscode.window.showErrorMessage(e);
-                }
-            }
-        }
-
-        windowController.runWithProgress('패치 생성', this.name, this.analyze_cmd, this.get_patch_cmd(errorKey), stdoutHandler, stderrHandler, exitHandler);
     }
 
     public generate_patched_file(key: string) {
         const file = key.split("___")[1].replaceAll("__", "/");
         const cwd = util.getCwd();
 
-        const patchedPath = path.join(cwd, "patched");
+        const patchedPath = path.join(cwd, this.patched_path);
         
         if(!util.pathExists(patchedPath))
             fs.mkdirSync(patchedPath);
 
-        const patchPath = path.join(cwd, "patches");
+        const patchPath = path.join(cwd, this.patch_path);
         const patchFile = path.join(patchPath, `${key}.json`);
 
         const jsonString = fs.readFileSync(patchFile, 'utf-8');
@@ -172,7 +164,7 @@ export class SaverEngine extends Engine {
         const data: SaverPatch = JSON.parse(jsonString);
 
         const src = path.join(cwd, file);
-        const dst = path.join(cwd, "patched", key);
+        const dst = path.join(patchedPath, key);
         
         switch (data.method) {
             case "Insert":
@@ -198,11 +190,11 @@ export class SaverEngine extends Engine {
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
-        return path.join(util.getCwd(), this._patch_input_path, `${errorKey}.json`);
+        return path.join(util.getCwd(), this.patch_input_path, `${errorKey}.json`);
     }
 
     private get_errorData_path(bug: Bug): string {
-        return path.join(util.getCwd(), this._patch_input_path, `${this.get_error_key(bug)}.json`);
+        return path.join(util.getCwd(), this.patch_input_path, `${this.get_error_key(bug)}.json`);
     }
 
     public set_build_cmd(build_cmd: string): void {

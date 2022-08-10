@@ -2,13 +2,13 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { EngineEnv } from '../engine/engine_env';
 import { getCwd } from '../common/util';
+import * as constants from '../common/constants';
 
-const GEN_PATCH_COMMAND = 'bugfixer.genPatch';
-const DIFF_PATCH_COMMAND = 'bugfixer.diffPatch';
+
 
 export function registerCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
-			vscode.commands.registerCommand(GEN_PATCH_COMMAND, (key) => generatePatch(key))
+			
 	);
 }
 
@@ -43,7 +43,7 @@ export class Patcher implements vscode.CodeActionProvider {
 		const errorKey = `${src}_${sink}___${path.relative(getCwd(), document.fileName).replaceAll('/', '__')}`;
 		const action = new vscode.CodeAction(`${patch_maker.name}: 패치 만들기 ${src}`, vscode.CodeActionKind.QuickFix);
 
-		action.command = { command: GEN_PATCH_COMMAND, arguments: [errorKey], title: `패치 생성`, tooltip: '현재 오류에 대한 패치를 생성합니다.' };
+		action.command = { command: constants.MAKE_PATCH_COMMAND, arguments: [errorKey], title: `패치 생성`, tooltip: '현재 오류에 대한 패치를 생성합니다.' };
 		action.diagnostics = [diagnostic];
 		action.isPreferred = true;
 		return action;

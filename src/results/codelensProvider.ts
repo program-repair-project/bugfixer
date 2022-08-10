@@ -2,6 +2,11 @@ import * as vscode from 'vscode';
 import * as util from '../common/util';
 import * as path from 'path';
 
+import { Engine } from "../engine/engine";
+import { EngineEnv } from "../engine/engine_env";
+
+import * as constants from "../common/constants";
+
 /**
  * CodelensProvider
  */
@@ -21,6 +26,8 @@ export class CodelensProvider implements vscode.CodeLensProvider {
       this.codeLenses = [];
       const cwd = util.getCwd();
 
+      const patch_maker: Engine = EngineEnv.getInstance().get_patch_maker();
+
       const diagnostics = vscode.languages.getDiagnostics().filter(d => d[0].path === document.uri.path).map(d => d[1]).reduce((acc, d) => acc.concat(d));
             
 			const leaks = diagnostics.filter(diagnostic => diagnostic.code === "MEMORY_LEAK");
@@ -36,7 +43,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const file = document.fileName;
 
         const errorKey = `${src}_${sink}___${path.relative(cwd, document.fileName).replaceAll('/', '__')}`;
-        const patched = path.join(cwd, "patched", errorKey);
+        const patched = path.join(cwd, patch_maker.patched_path, errorKey);
 
         if(!util.pathExists(patched))
           return;
@@ -55,7 +62,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
           applyPatch.command = {
             title: `패치 적용하기 (${src} 라인에서 할당됨)`,
             tooltip: `패치 적용하기`,
-            command: "bugfixer.applyPatch",
+            command: constants.APPLY_PATCH_COMMAND,
             arguments: [file, patched]
           };
           this.codeLenses.push(applyPatch);

@@ -58,7 +58,7 @@ export class WindowController {
           });
 
           process.on("exit", (code, signal) => {
-            if (code === 0  || this.prop.success) {
+            if (code === 0 || code === 106) {
               progress.report({ increment: 100, message: "실행 완료" });
               vscode.window.showInformationMessage(`${name} 실행이 완료되었습니다.`);
               this.logger.info("Done.");
