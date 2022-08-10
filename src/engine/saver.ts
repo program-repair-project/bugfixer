@@ -180,9 +180,8 @@ export class SaverEngine extends Engine {
     }
 
     public apply_patch(src: string, patched: string): void {
-        fs.renameSync(patched, src);
-        // this.generate_patched_file(key);
-        // 패치된 파일을 원본 파일과 바꾼다.
+        // 패치된 파일을 원본 파일에 덮어 쓴다.
+        fs.copyFileSync(patched, src);
     }
 
     public get_error_key(bug: Bug): string {
