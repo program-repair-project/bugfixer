@@ -42,14 +42,23 @@ export class CodelensProvider implements vscode.CodeLensProvider {
           return;
 
         if (range) {
-          const lens = new vscode.CodeLens(range);
-          lens.command = {
+          const patchDiff = new vscode.CodeLens(range);
+          patchDiff.command = {
             title: `패치 미리보기 (${src} 라인에서 할당됨)`,
             tooltip: `패치 미리보기: ${diagnostic.message}`,
             command: "vscode.diff",
-            arguments: [vscode.Uri.file(file), vscode.Uri.file(patched)]
+            arguments: [vscode.Uri.file(file), vscode.Uri.file(patched), `패치 미리보기: ${file}}`, {viewColumn: 2, preview: true, preserveFocus: true}]
           };
-          this.codeLenses.push(lens);
+          this.codeLenses.push(patchDiff);
+
+          const applyPatch = new vscode.CodeLens(range);
+          applyPatch.command = {
+            title: `패치 적용하기 (${src} 라인에서 할당됨)`,
+            tooltip: `패치 적용하기`,
+            command: "bugfixer.applyPatch",
+            arguments: [file, patched]
+          };
+          this.codeLenses.push(applyPatch);
         }
       });
       //     

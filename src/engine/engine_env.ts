@@ -1,4 +1,4 @@
-import { inherits } from "util";
+import * as vscode from 'vscode';
 import { Engine } from "./engine";
 import { SaverEngine } from "./saver";
 
@@ -12,6 +12,8 @@ export class EngineEnv {
     this.analyzer = new SaverEngine();
     this.patch_maker = new SaverEngine();
     this.validator = new SaverEngine();
+
+    vscode.commands.registerCommand('bugfixer.applyPatch', (src, patched) => this.patch_maker.apply_patch(src, patched));
   }
   
   public static getInstance () { 
