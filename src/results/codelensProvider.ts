@@ -54,7 +54,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
             title: `패치 미리보기 (${src} 라인에서 할당됨)`,
             tooltip: `패치 미리보기: ${diagnostic.message}`,
             command: "vscode.diff",
-            arguments: [vscode.Uri.file(patched), vscode.Uri.file(file), `패치 미리보기: ${path.basename(file)}}`, {viewColumn: 2, preview: true, preserveFocus: true}]
+            arguments: [vscode.Uri.file(patched), vscode.Uri.file(file), `패치 미리보기: ${path.basename(file)}`, {viewColumn: 1, preview: false, preserveFocus: true}]
           };
           this.codeLenses.push(patchDiff);
 
