@@ -52,6 +52,9 @@ function createDiagnostic(uri: vscode.Uri, bug:Bug): vscode.Diagnostic {
 		const navigationList = [{line: bug.src_line, msg: "에서 할당 됨"}, {line: bug.sink_line, msg: "에서 오류 발생"}];
 		
 		diagnostic.relatedInformation = navigationList.map((navi) => {
+			// line이 0보다 작아지지 않도록 함
+			if(navi.line <= 0) navi.line = 1;
+			
 			return new vscode.DiagnosticRelatedInformation(
 				new vscode.Location(uri,
 						new vscode.Range(new vscode.Position(navi.line - 1, 0), new vscode.Position(navi.line - 1, 999))),
