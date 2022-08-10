@@ -14,7 +14,7 @@ import * as log_util from "./common/logger";
 import * as wc from "./ui/window_controller";
 import * as constants from "./common/constants";
 
-export class BugfixerController {
+export class EngineController {
   private _commandForAnalysis: Disposable;
   private logger: log_util.Logger;
 
