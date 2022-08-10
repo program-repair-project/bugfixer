@@ -29,25 +29,19 @@ function deleteLine(data: Array<string>, line:number, contents: string): Array<s
 	return data.splice(line, 1);
 }
 
-export function manipulateFile(src: string, dst: string, line: number, contents: string, func: Function) {
-	var data = fs.readFileSync(src).toString().split("\n");
-	func(data, line, contents)
-	var text = data.join("\n");
+export const insertFromFile = manipulateFile(insertLine);
+export const replaceFromFile = manipulateFile(replaceLine);
+export const deleteFromFile = manipulateFile(deleteLine);
 
-	fs.writeFile(dst, text, function (err) {
-		if (err) return console.log(err);
-	});
+function manipulateFile(func: Function): (src: string, dst: string, line: number, contents: string) => void {
+	return function(src: string, dst: string, line: number, contents: string) {
+		var data = fs.readFileSync(src).toString().split("\n");
+		func(data, line, contents)
+		var text = data.join("\n");
+
+		fs.writeFile(dst, text, function (err) {
+			if (err) return console.log(err);
+		});
+	} 
 }
-
-export function insertFromFile(src: string, dst:string, line: number, contents: string) {
-	return manipulateFile(src, dst, line, contents, insertLine);
-} 
-
-export function replaceFromFile(src: string, dst:string, line: number, contents: string) {
-	return manipulateFile(src, dst, line, contents, replaceLine);
-} 
-
-export function deleteFromFile(src: string, dst:string, line: number, contents: string) {
-	return manipulateFile(src, dst, line, contents, deleteLine);
-} 
 
