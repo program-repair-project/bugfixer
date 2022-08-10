@@ -36,11 +36,7 @@ export class BugfixerController {
     analyzer.clean_build_cmd = "make"
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);
-
-    if (util.pathExists(output_path)) {
-      fs.rmdirSync(output_path, { recursive: true });
-    }
-
+    
     let args: string[] = analyzer.get_analysis_cmd();
 
     vscode.window.showInformationMessage(`${analyzer.analyze_cmd} ${args.join(" ")}`);
