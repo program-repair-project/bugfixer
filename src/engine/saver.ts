@@ -112,7 +112,7 @@ export class SaverEngine extends Engine {
         }
 
         fs.readFileSync(patch_data_file).toString().split("\n").forEach((log) => {
-            var arr = log.match(/- \[[+-]\] { (.*): (.*)\(.*:([_a-zA-Z][_a-zA-Z0-9->]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
+            var arr = log.match(/- \[[+-]\] { (.*): (.*)\*\(.*:([_a-zA-Z][_a-zA-Z0-9->]*)\)(.*) at [\d]* \(line ([\d]*), column ([\d]*)\)/);
             if (arr?.length == 7) {
                 const method = arr[1];
                 const contents = (arr[2] + arr[3] + arr[4]).replace("true", "TRUE") + ";";
