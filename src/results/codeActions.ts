@@ -5,14 +5,10 @@ import { getCwd } from '../common/util';
 
 const GEN_PATCH_COMMAND = 'bugfixer.genPatch';
 const DIFF_PATCH_COMMAND = 'bugfixer.diffPatch';
-const APPLY_PATCH_COMMAND = 'bugfixer.applyPatch';
 
 export function registerCommand(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 			vscode.commands.registerCommand(GEN_PATCH_COMMAND, (key) => generatePatch(key))
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand(APPLY_PATCH_COMMAND, (key) => applyPatch(key))
 	);
 }
 
