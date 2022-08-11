@@ -1,48 +1,35 @@
-# bugfixer README
+# Bugfixer
 
-SW 오류 자동 수정 엔진 실행 및 결과 확인 그리고 패치기능이 포함된 VS Code 확장 프로그램입니다.
+Bugfixer is a framework for autofix engines: Saver and NPEX.
 
-## 기능
+## Description
 
-다음 기능을 포함합니다.
-- Saver 엔진 실행, 패치 생성 및 적용
-- NPEX를 이용한 패치 생성 및 적용
+Bugfixer provides below features.
+- Find bugs, generate patches and applying patch using SAVER (C language).
+- Find bugs, generate patches and applying patch using NPEX (JAVA language).
 
+## Prerequisite
 
-## 준비물
+- [Saver](https://github.com/kupl/SAVER_public) & its runtime environment
+- [NPEX](https://github.com/kupl/npex) & its runtime environment
+- npm
 
-- Saver 실행 준비
-  - Virtual Box
-  - Saver VM
-
-## 빌드 및 디버그
-
-- 컴파일
+## Build and Debug
+### Build
 
 ```
 git clone git@github.com:chjkw/bugfixer2.git
 cd bugfixer2
 npm install
 ```
-- vscode에서 폴더 열기
-- F5를 눌러 실행
 
-## 제약사항
+### Debug
+- Open project root directory in the Visual Studio Code
+- Press F5 to Run/Debug
 
-- Saver 관련 기능만 실행가능합니다.
-- NPEX는 준비 중입니다.
+### Related Information
 
-## Release Notes
-
-### 0.0.2
-
-- Saver 실행, 패치 생성 기능 추가
-
-### 관련 정보
-
-* 개발 가이드
-  * [VS Code Extension 개발 가이드](https://code.visualstudio.com/api)
-
-* 엔진
+* [VS Code Extension API](https://code.visualstudio.com/api)
+* Engines
   * [Saver](https://github.com/kupl/SAVER_public)
   * [NPEX](https://github.com/kupl/npex)
