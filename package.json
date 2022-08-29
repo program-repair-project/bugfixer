@@ -22,6 +22,10 @@
 			{
 				"command": "bugfixer.analyze_continue",
 				"title": "Bugfixer 실행: 이어서"
+			},
+			{
+				"command": "bugfixer.progress_detail",
+				"title": "Bugfixer 실행 중: 자세히보기"
 			}
 		],
 		"configuration": [
