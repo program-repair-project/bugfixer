@@ -1,0 +1,179 @@
+html {
+  background-color: #34495E;
+  font-family: "Raleway";
+  color: #FBFCFC;
+}
+
+section {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 33vh;
+}
+section .section-wrapper {
+  padding: 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.line {
+  width: 90%;
+  height: 4px;
+  background: linear-gradient(to right, #C0392B 13.25%, #FBFCFC 13.25%);
+  margin-top: 20vh;
+  margin-left: 5%;
+}
+.line:hover {
+  cursor: pointer;
+}
+.line .year {
+  background-color: #FBFCFC;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+  left: 5.3%;
+  box-sizing: border-box;
+  margin-right: calc(2.65% - 12.5px);
+  margin-left: calc(2.65% - 12.5px);
+  width: 25px;
+  height: 25px;
+  top: -10px;
+}
+.line .year::before {
+  content: attr(data-timelinelabel);
+  position: absolute;
+  top: -75px;
+  left: -5px;
+  width: 150px;
+  transform: rotateZ(-45deg);
+  display: block;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+.line .year::after {
+  content: attr(data-mobiletext);
+  position: absolute;
+  top: 23px;
+  left: -15px;
+  padding: 10px;
+}
+.line .quarter {
+  background-color: #FBFCFC;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+  left: 5.3%;
+  box-sizing: border-box;
+  margin-right: calc(2.65% - 7.5px);
+  margin-left: calc(2.65% - 7.5px);
+  width: 15px;
+  height: 15px;
+  top: -5px;
+}
+.line .complete {
+  background-color: #C0392B;
+}
+.line .dot.active {
+  background-color: #C0392B;
+  cursor: pointer;
+}
+
+#timeline {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #F1C40F;
+  color: #34495E;
+}
+
+#description {
+  min-height: 30vh;
+  background-color: #34495E;
+}
+#description h3 {
+  color: #C0392B;
+  font-weight: 600;
+}
+#description .section-wrapper > div {
+  display: none;
+}
+#description .section-wrapper > div.text-default {
+  display: block;
+}
+
+@media all and (max-width: 760px) {
+  .line .year {
+    width: 20px;
+    height: 20px;
+    margin-right: calc(2.65% - 10px);
+    margin-left: calc(2.65% - 10px);
+    top: -8px;
+  }
+  .line .quarter {
+    width: 10px;
+    height: 10px;
+    margin-right: calc(2.65% - 5px);
+    margin-left: calc(2.65% - 5px);
+    top: -3px;
+  }
+}
+@media all and (min-width: 481px) {
+  .quarter.q1 {
+    display: none;
+  }
+
+  .dot:hover {
+    background-color: #34495E;
+    cursor: pointer;
+  }
+}
+@media all and (max-width: 480px) {
+  #timeline {
+    padding-bottom: 20px;
+    padding-top: 0;
+  }
+
+  .line {
+    height: auto;
+    background: transparent;
+    margin-top: 20px;
+  }
+  .line .year, .line .quarter {
+    border-radius: 0;
+    float: none;
+    position: static;
+    margin-right: 0;
+    margin-left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 42px;
+    text-align: center;
+    transition: background-color 500ms;
+  }
+  .line .year::after, .line .quarter::after {
+    content: attr(data-mobiletext);
+    display: block;
+    padding-top: 12px;
+  }
+  .line .year.complete, .line .quarter.complete {
+    background-color: #34495E;
+    color: #FBFCFC;
+  }
+  .line .year.active, .line .year.complete.active, .line .quarter.active, .line .quarter.complete.active {
+    background-color: #C0392B;
+    color: #FBFCFC;
+  }
+  .line .year {
+    display: block;
+  }
+  .line .year::before {
+    display: none;
+  }
+  .line .year::after {
+    position: static;
+  }
+  .line .quarter {
+    display: none;
+  }
+  .line .quarter.y2017 {
+    display: block;
+  }
+}
