@@ -14,7 +14,7 @@ export function pathExists(p: string): boolean {
 export function getCwd(): string {
 	if(vscode.workspace.workspaceFolders === undefined) return "";
 
-  return vscode.workspace.workspaceFolders[0].uri.path;
+  return vscode.workspace.workspaceFolders[0].uri.path.slice(1);
 } 
 
 function insertLine(data: Array<string>, line:number, contents: string): Array<string> {

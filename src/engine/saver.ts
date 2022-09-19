@@ -13,7 +13,7 @@ export class SaverEngine extends Engine {
     private logger: log_util.Logger;
 
     constructor() {
-        super("Saver", "infer", "infer-out");
+        super("Saver", "docker", "infer-out");
         this.report_file = "report.json";
         this.logger = new log_util.Logger("Saver");
     }
