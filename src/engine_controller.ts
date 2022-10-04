@@ -43,8 +43,11 @@ export class EngineController {
     const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
     analyzer.build_cmd = "make";
     analyzer.clean_build_cmd = "make clean all"
+    console.log(util.getCwd());
     //let args: string[] = analyzer.get_analysis_cmd();
-    let args: string[] = `run -w /home/workspace/sample/vol/WavPack -v D:\\jiwon\\benchmarks\\WavPack:/home/workspace/sample/vol/WavPack saver_docker_build:0.0.2 /bin/bash -c`.split(" ");
+
+    const args_tmp = "run -w /home/workspace/sample/vol/WavPack -v " + util.getCwd() + ":/home/workspace/sample/vol/WavPack saver_docker_build:0.0.2 /bin/bash -c"
+    let args: string[] = args_tmp.split(" ");
     args.push("/home/workspace/sample/vol/WavPack/build.sh && /app/saver/bin/infer run -- make -j4");
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);

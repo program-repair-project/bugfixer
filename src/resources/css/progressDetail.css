@@ -1,179 +1,149 @@
-html {
-  background-color: #34495E;
-  font-family: "Raleway";
-  color: #FBFCFC;
+body{
+  background:#eee;
+  margin-top:20px;
 }
-
-section {
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 33vh;
+.hori-timeline .events {
+  border-top: 3px solid #e9ecef;
 }
-section .section-wrapper {
-  padding: 10px;
-  box-sizing: border-box;
-  height: 100%;
-}
-
-.line {
-  width: 90%;
-  height: 4px;
-  background: linear-gradient(to right, #C0392B 13.25%, #FBFCFC 13.25%);
-  margin-top: 20vh;
-  margin-left: 5%;
-}
-.line:hover {
-  cursor: pointer;
-}
-.line .year {
-  background-color: #FBFCFC;
-  border-radius: 50%;
-  float: left;
-  position: relative;
-  left: 5.3%;
-  box-sizing: border-box;
-  margin-right: calc(2.65% - 12.5px);
-  margin-left: calc(2.65% - 12.5px);
-  width: 25px;
-  height: 25px;
-  top: -10px;
-}
-.line .year::before {
-  content: attr(data-timelinelabel);
-  position: absolute;
-  top: -75px;
-  left: -5px;
-  width: 150px;
-  transform: rotateZ(-45deg);
+.hori-timeline .events .event-list {
   display: block;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-.line .year::after {
-  content: attr(data-mobiletext);
-  position: absolute;
-  top: 23px;
-  left: -15px;
-  padding: 10px;
-}
-.line .quarter {
-  background-color: #FBFCFC;
-  border-radius: 50%;
-  float: left;
   position: relative;
-  left: 5.3%;
-  box-sizing: border-box;
-  margin-right: calc(2.65% - 7.5px);
-  margin-left: calc(2.65% - 7.5px);
-  width: 15px;
-  height: 15px;
-  top: -5px;
+  text-align: center;
+  padding-top: 70px;
+  margin-right: 0;
 }
-.line .complete {
-  background-color: #C0392B;
+.hori-timeline .events .event-list:before {
+  content: "";
+  position: absolute;
+  height: 36px;
+  border-right: 2px dashed #dee2e6;
+  top: 0;
 }
-.line .dot.active {
-  background-color: #C0392B;
-  cursor: pointer;
+.hori-timeline .events .event-list .event-date {
+  position: absolute;
+  top: 38px;
+  left: 0;
+  right: 0;
+  width: 75px;
+  margin: 0 auto;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+@media (min-width: 1140px) {
+  .hori-timeline .events .event-list {
+      display: inline-table;
+      width: 24%;
+      padding-top: 45px;
+  }
+  .hori-timeline .events .event-list .event-date {
+      top: -12px;
+  }
+}
+.bg-soft-primary {
+  background-color: rgba(64,144,203,.3)!important;
+}
+.bg-soft-success {
+  background-color: rgba(71,189,154,.3)!important;
+}
+.bg-soft-danger {
+  background-color: rgba(231,76,94,.3)!important;
+}
+.bg-soft-warning {
+  background-color: rgba(249,213,112,.3)!important;
+}
+.card {
+  border: none;
+  margin-bottom: 24px;
+  -webkit-box-shadow: 0 0 13px 0 rgba(236,236,241,.44);
+  box-shadow: 0 0 13px 0 rgba(236,236,241,.44);
 }
 
-#timeline {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background-color: #F1C40F;
-  color: #34495E;
+.vertical-timeline {
+  width: 100%;
+  position: relative;
+  padding: 1.5rem 0 1rem;
 }
 
-#description {
-  min-height: 30vh;
-  background-color: #34495E;
+.vertical-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 67px;
+  height: 100%;
+  width: 4px;
+  background: #e9ecef;
+  border-radius: .25rem;
 }
-#description h3 {
-  color: #C0392B;
-  font-weight: 600;
+
+.vertical-timeline-element {
+  position: relative;
+  margin: 0 0 1rem;
 }
-#description .section-wrapper > div {
+
+.vertical-timeline--animate .vertical-timeline-element-icon.bounce-in {
+  visibility: visible;
+  animation: cd-bounce-1 .8s;
+}
+.vertical-timeline-element-icon {
+  position: absolute;
+  top: 0;
+  left: 60px;
+}
+
+.vertical-timeline-element-icon .badge-dot-xl {
+  box-shadow: 0 0 0 5px #fff;
+}
+
+.badge-dot-xl {
+  width: 18px;
+  height: 18px;
+  position: relative;
+}
+.badge:empty {
   display: none;
 }
-#description .section-wrapper > div.text-default {
+
+
+.badge-dot-xl::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: .25rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -5px 0 0 -5px;
+  background: #fff;
+}
+
+.vertical-timeline-element-content {
+  position: relative;
+  margin-left: 90px;
+  font-size: .8rem;
+}
+
+.vertical-timeline-element-content .timeline-title {
+  font-size: .8rem;
+  text-transform: uppercase;
+  margin: 0 0 .5rem;
+  padding: 2px 0 0;
+  font-weight: bold;
+}
+
+.vertical-timeline-element-content .vertical-timeline-element-date {
   display: block;
+  position: absolute;
+  left: -90px;
+  top: 0;
+  padding-right: 10px;
+  text-align: right;
+  color: #adb5bd;
+  font-size: .7619rem;
+  white-space: nowrap;
 }
 
-@media all and (max-width: 760px) {
-  .line .year {
-    width: 20px;
-    height: 20px;
-    margin-right: calc(2.65% - 10px);
-    margin-left: calc(2.65% - 10px);
-    top: -8px;
-  }
-  .line .quarter {
-    width: 10px;
-    height: 10px;
-    margin-right: calc(2.65% - 5px);
-    margin-left: calc(2.65% - 5px);
-    top: -3px;
-  }
-}
-@media all and (min-width: 481px) {
-  .quarter.q1 {
-    display: none;
-  }
-
-  .dot:hover {
-    background-color: #34495E;
-    cursor: pointer;
-  }
-}
-@media all and (max-width: 480px) {
-  #timeline {
-    padding-bottom: 20px;
-    padding-top: 0;
-  }
-
-  .line {
-    height: auto;
-    background: transparent;
-    margin-top: 20px;
-  }
-  .line .year, .line .quarter {
-    border-radius: 0;
-    float: none;
-    position: static;
-    margin-right: 0;
-    margin-left: 0;
-    box-sizing: border-box;
-    width: 100%;
-    height: 42px;
-    text-align: center;
-    transition: background-color 500ms;
-  }
-  .line .year::after, .line .quarter::after {
-    content: attr(data-mobiletext);
-    display: block;
-    padding-top: 12px;
-  }
-  .line .year.complete, .line .quarter.complete {
-    background-color: #34495E;
-    color: #FBFCFC;
-  }
-  .line .year.active, .line .year.complete.active, .line .quarter.active, .line .quarter.complete.active {
-    background-color: #C0392B;
-    color: #FBFCFC;
-  }
-  .line .year {
-    display: block;
-  }
-  .line .year::before {
-    display: none;
-  }
-  .line .year::after {
-    position: static;
-  }
-  .line .quarter {
-    display: none;
-  }
-  .line .quarter.y2017 {
-    display: block;
-  }
+.vertical-timeline-element-content:after {
+  content: "";
+  display: table;
+  clear: both;
 }
