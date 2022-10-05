@@ -22,6 +22,10 @@
 			{
 				"command": "bugfixer.analyze_continue",
 				"title": "Bugfixer 실행: 이어서"
+			},
+			{
+				"command": "bugfixer.progress_detail",
+				"title": "Bugfixer 실행 중: 자세히보기"
 			}
 		],
 		"configuration": [
@@ -38,6 +42,17 @@
 							"trace"
 						],
 						"description": "Log Level"
+					}
+				}
+			},
+			{
+				"type": "object",
+				"title": "Bugfixer 분석 결과 경로 설정",
+				"properties": {
+					"bugfixer.infer_out_path": {
+						"type": "string",
+						"default": "./output",
+						"description": "Set infer-out volume to local path"
 					}
 				}
 			}

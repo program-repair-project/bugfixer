@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 
 import { EngineController } from './engine_controller';
+import { WebviewController } from './ui/webview_controller';
 import { CodelensProvider } from './results/codelensProvider';
 import { DiagnosticsProvider } from './results/diagnostics';
 import { Patcher, registerCommand } from './results/codeActions';
@@ -14,6 +15,9 @@ export function activate(context: vscode.ExtensionContext) {
 	let bugfixerController = new EngineController(context);
 	context.subscriptions.push(bugfixerController);
 
+	let bugfixerWebviewController = new WebviewController(context);
+	context.subscriptions.push(bugfixerWebviewController);
+	
 	const diagnostics = new DiagnosticsProvider(context);
 
 	diagnostics.subscribeToDocumentChanges(context);
