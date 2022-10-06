@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="WEBVIEWCSS">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script src="WEBVIEWJS"></script>
+
+    <template id="template-log">
+        <div class="vertical-timeline-item vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in">
+                    <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                </span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">{{title}}</h4>
+                    <p>{{message}}</p>
+                    <span class="vertical-timeline-element-date">{{time}}</span>
+                </div>
+            </div>
+        </div>
+    </template>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-5">Horizontal Timeline</h4>
+
+                        <div class="hori-timeline" dir="ltr">
+                            <ul class="list-inline events">
+                                <li class="list-inline-item event-list">
+                                    <div class="px-4">
+                                        <div class="event-date bg-soft-primary text-primary">Step 1</div>
+                                        <h5 class="font-size-16">Build</h5>
+                                        <p class="text-muted">It will be as simple as occidental in fact it will be
+                                            Occidental Cambridge friend</p>
+                                        <div>
+                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                href="#buildReadMore" role="button" aria-expanded="false"
+                                                aria-controls="buildReadMore">Read more</a>
+                                        </div>
+                                        <div id="buildReadMore"
+                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-inline-item event-list">
+                                    <div class="px-4">
+                                        <div class="event-date bg-soft-success text-success">Step 2</div>
+                                        <h5 class="font-size-16">Analyze</h5>
+                                        <p class="text-muted">Everyone realizes why a new common language one could
+                                            refuse translators.</p>
+                                        <div>
+                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                href="#analyzeReadMore" role="button" aria-expanded="false"
+                                                aria-controls="analyzeReadMore">Read more</a>
+                                        </div>
+                                        <div id="analyzeReadMore"
+                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-inline-item event-list">
+                                    <div class="px-4">
+                                        <div class="event-date bg-soft-danger text-danger">Step 3</div>
+                                        <h5 class="font-size-16">Patch</h5>
+                                        <p class="text-muted">If several languages coalesce the grammar of the resulting
+                                            simple and regular</p>
+                                        <div>
+                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                href="#patchReadMore" role="button" aria-expanded="false"
+                                                aria-controls="patchReadMore">Read more</a>
+                                        </div>
+                                        <div id="patchReadMore"
+                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);"
+                                                                data-abc="true">10:00AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-inline-item event-list">
+                                    <div class="px-4">
+                                        <div class="event-date bg-soft-warning text-warning">Step 4</div>
+                                        <h5 class="font-size-16">Validate</h5>
+                                        <p class="text-muted">Languages only differ in their pronunciation and their
+                                            most common words.</p>
+                                        <div>
+                                            <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                href="#validateReadMore" role="button" aria-expanded="false"
+                                                aria-controls="validateReadMore">Read more</a>
+                                        </div>
+                                        <div id="validateReadMore"
+                                            class="collapse vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                                <div>
+                                                    <span class="vertical-timeline-element-icon bounce-in">
+                                                        <i class="badge badge-dot badge-dot-xl badge-success"> </i>
+                                                    </span>
+                                                    <div class="vertical-timeline-element-content bounce-in">
+                                                        <h4 class="timeline-title">Purchase new hosting plan</h4>
+                                                        <p>Purchase new hosting plan as discussed with development team,
+                                                            today at <a href="javascript:void(0);" data-abc="true">10:00
+                                                                AM</a></p>
+                                                        <span class="vertical-timeline-element-date">10:30 PM</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+        </div>
+
+        <body>
+
+</html>
