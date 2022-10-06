@@ -26,6 +26,10 @@
 			{
 				"command": "bugfixer.progress_detail",
 				"title": "Bugfixer 실행 중: 자세히보기"
+			},
+			{
+				"command": "print_progress_test",
+				"title": "Bugfixer 실행 중: 출력 테스트"
 			}
 		],
 		"configuration": [
