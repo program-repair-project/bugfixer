@@ -20,7 +20,7 @@ export class EngineController {
   private logger: log_util.Logger;
 
   public constructor(private context: vscode.ExtensionContext) {
-    this._commandForAnalysisAll = commands.registerCommand("bugfixer.analyze_all",
+    this._commandForAnalysisAll = commands.registerCommand("bugfixer.run_saver",
       (uri: vscode.Uri) => {
         this.analyze_all(uri);
       });
@@ -44,11 +44,7 @@ export class EngineController {
     analyzer.build_cmd = "make";
     analyzer.clean_build_cmd = "make clean all"
     console.log(util.getCwd());
-    //let args: string[] = analyzer.get_analysis_cmd();
-
-    const args_tmp = "run -w /home/workspace/sample/vol/WavPack -v " + util.getCwd() + ":/home/workspace/sample/vol/WavPack saver_docker_build:0.0.2 /bin/bash -c"
-    let args: string[] = args_tmp.split(" ");
-    args.push("/home/workspace/sample/vol/WavPack/build.sh && /app/saver/bin/infer run -- make -j4");
+    let args: string[] = analyzer.get_analysis_cmd();
 
     const output_path = path.join(util.getCwd(), analyzer.output_path);
     if (util.pathExists(output_path)) {

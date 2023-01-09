@@ -24,13 +24,16 @@ export class SaverEngine extends Engine {
     }
 
     public get_analysis_cmd(): string[] {
-        const cmd: string[] = ["run", "-g", "--reactive", "--"];
-        return cmd.concat(this.clean_build_cmd.split(" "));
+        const cmd: string[] = ["run", "-w", "/home/workspace/sample/benchmarks/WavPack", "-v", `${util.getCwd()}/infer-out:/home/workspace/sample/benchmarks/WavPack/infer-out`, "juniair/saver_docker:0.1.2","/bin/bash", "-c"];
+        cmd.push("./autogen.sh && /app/saver/bin/infer run -- make -j4");
+        return cmd;
     }
 
     public get_patch_cmd(errorKey: string): string[] {
-        const cmd: string[] = ["saver", "--error-report", this.get_errorData_path_by_key(errorKey)];
+        const cmd: string[] = ["run", "-w", "/home/workspace/sample/benchmarks/WavPack", "-v", `${util.getCwd()}/infer-out:/home/workspace/sample/benchmarks/WavPack/infer-out`, "juniair/saver_docker:0.1.2","/bin/bash", "-c"];
+        cmd.push(`/app/saver/bin/infer saver --error-report ${this.get_errorData_path_by_key(errorKey)}`);
         return cmd;
+
     }
 
     public get_file_bugs_map(): Map<string, Bug[]> {
@@ -188,7 +191,7 @@ export class SaverEngine extends Engine {
     }
 
     private get_errorData_path_by_key(errorKey: string): string {
-        return path.join(util.getCwd(), this.patch_input_path, `${errorKey}.json`);
+        return path.join(this.patch_input_path, `${errorKey}.json`).replaceAll("\\", "/");
     }
 
     private get_errorData_path(bug: Bug): string {

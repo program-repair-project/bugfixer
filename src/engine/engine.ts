@@ -22,7 +22,7 @@ export abstract class Engine {
     
     constructor(name:string, analyze_cmd:string, output_path:string){
         this._name = name;
-        this._analyze_cmd = analyze_cmd;
+        this._analyze_cmd = analyze_cmd; 
         this._output_path = output_path;
         this._patch_path = `${this._output_path}/${this._name}/patches`;
         this._patch_data_path = `${this._patch_path}/data`;

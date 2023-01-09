@@ -42,7 +42,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const sink = +arr[2];
         const file = document.fileName;
 
-        const errorKey = `${src}_${sink}___${path.relative(cwd, document.fileName).replaceAll('/', '__')}`;
+        const errorKey = `${src}_${sink}___${path.relative(cwd, document.fileName).replaceAll('/', '__').replaceAll('\\', '__')}`;
         const patched = path.join(cwd, patch_maker.patched_path, errorKey);
 
         if(!util.pathExists(patched))

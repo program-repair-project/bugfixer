@@ -10,18 +10,27 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onLanguage:c"
+		"onLanguage:c",
+		"onLanguage:java"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "bugfixer.analyze_all",
-				"title": "Bugfixer 실행: 처음부터"
+				"command": "bugfixer.run_saver",
+				"title": "Bugfixer 실행: 명세 없이 분석 [C]"
 			},
 			{
-				"command": "bugfixer.analyze_continue",
-				"title": "Bugfixer 실행: 이어서"
+				"command": "bugfixer.run_npex",
+				"title": "Bugfixer 실행: 명세 없이 분석 [Java]"
+			},
+			{
+				"command": "bugfixer.run_pyter",
+				"title": "Bugfixer 실행: 명세 없이 분석 [Python]"
+			},
+			{
+				"command": "bugfixer.run_moses",
+				"title": "Bugfixer 실행: 명세 기반 분석 [C]"
 			},
 			{
 				"command": "bugfixer.progress_detail",
