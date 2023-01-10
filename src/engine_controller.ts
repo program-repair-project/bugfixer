@@ -69,6 +69,9 @@ export class EngineController {
     vscode.window.showInformationMessage(`${analyzer.analyze_cmd} ${args.join(" ")}`);
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
 
+    //Create output channel
+    let bugfixerChannel = vscode.window.createOutputChannel("Bugfixer");
+
     const stderrHandler = (data:any) => {
       const progress = data.progress;
       const log = data.log;
@@ -76,9 +79,15 @@ export class EngineController {
       if (log.includes("Starting Process...")) {
         progress.report({ message: `${analyzer.name} 실행 중` });
       }
+
+      //Write to output.
+      bugfixerChannel.appendLine(log);
     }
     
-    const stdoutHandler = (data:any) => {}
+    const stdoutHandler = (data:any) => {
+      //Write to output.
+      bugfixerChannel.appendLine(data.toString());
+    }
     const exitHandler = (data:any) => { 
       vscode.commands.executeCommand('bugfixer.refreshBugs'); 
     }
@@ -101,11 +110,18 @@ export class EngineController {
 
     let patch_maker_result = "";
 
+    //Create output channel
+    let bugfixerChannel = vscode.window.createOutputChannel("Bugfixer");
+
     const stdoutHandler = (data:any) => {
       patch_maker_result += data.toString();
+      //Write to output.
+      bugfixerChannel.appendLine(data.toString());
+
     }
     const stderrHandler = (data:any) => {
       patch_maker_result += data.log;
+      bugfixerChannel.appendLine(data.log);
     }
     const exitHandler = (data:any) => { 
       const cwd = util.getCwd();
