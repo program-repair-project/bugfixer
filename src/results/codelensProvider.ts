@@ -45,13 +45,33 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const errorKey = `${src}_${sink}___${path.relative(cwd, document.fileName).replaceAll('/', '__').replaceAll('\\', '__')}`;
         const patched = path.join(cwd, patch_maker.patched_path, errorKey);
 
-        if(!util.pathExists(patched))
+        this.addLensCommand(patched, file, range, src, diagnostic);
+      });
+
+      const npes = diagnostics.filter(diagnostic => diagnostic.code === "Null Pointer Exception");
+      const patches = patch_maker.get_patches();
+
+      npes.map(diagnostic => {
+        const range = diagnostic.range;
+        
+        var src = diagnostic.range.start.line;
+        const file = document.fileName;
+
+        patches.map((patch) => this.addLensCommand(patch.uri, file, range, src, diagnostic))
+
+      });
+
+      return this.codeLenses;
+    }
+
+    private addLensCommand(patched: string, file: string, range: vscode.Range, src: number, diagnostic:vscode.Diagnostic) {
+      if(!util.pathExists(patched))
           return;
 
         if (range) {
           const patchDiff = new vscode.CodeLens(range);
           patchDiff.command = {
-            title: `패치 미리보기 (${src} 라인에서 할당됨)`,
+            title: `패치 미리보기 (${src})`,
             tooltip: `패치 미리보기: ${diagnostic.message}`,
             command: "vscode.diff",
             arguments: [vscode.Uri.file(patched), vscode.Uri.file(file), `패치 미리보기: ${path.basename(file)}`, {viewColumn: 1, preview: false, preserveFocus: true}]
@@ -60,17 +80,13 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 
           const applyPatch = new vscode.CodeLens(range);
           applyPatch.command = {
-            title: `패치 적용하기 (${src} 라인에서 할당됨)`,
+            title: `패치 적용하기 (${src})`,
             tooltip: `패치 적용하기`,
             command: constants.APPLY_PATCH_COMMAND,
             arguments: [file, patched]
           };
           this.codeLenses.push(applyPatch);
         }
-      });
-      //     
-      // }
-      return this.codeLenses;
     }
 }
 

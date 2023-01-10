@@ -40,15 +40,15 @@ export class SaverBug {
 
 export class NPEXBug {
 	// npe.json
-constructor(
-			public readonly filepath: string,
-	public readonly line: number,
-			public readonly npe_class: string,
-			public readonly npe_method: string,
-	public readonly deref_field: string
-) {}
+	constructor(
+				public readonly filepath: string,
+		public readonly line: number,
+				public readonly npe_class: string,
+				public readonly npe_method: string,
+		public readonly deref_field: string
+	) {}
 
-public static toBug(bug: NPEXBug): Bug {
-	return new Bug("npe", "npe", "npe", bug.line, 1, bug.filepath, bug.npe_method, bug.line, bug.line);
-}
+	public static toBug(bug: NPEXBug): Bug {
+		return new Bug("error", "Null Pointer Exception", "널 포인터 예외가 발생했습니다.", bug.line, 1, bug.filepath, bug.npe_method, bug.line, bug.line);
+	}
 }

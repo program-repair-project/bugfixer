@@ -37,6 +37,7 @@ export class DiagnosticsProvider {
 		// read from infer-out/report.json
 		const patch_maker = EngineEnv.getInstance().get_patch_maker();
 
+		let originals: string[] = []
 		const results = patch_maker.get_file_bugs_map();
 		
 		if(results.size === 0) return;
@@ -46,30 +47,15 @@ export class DiagnosticsProvider {
 		results.forEach((bugs, file) => {
 			const diagnostics: vscode.Diagnostic[] = [];
 			const uri = vscode.Uri.file(path.join(cwd, file));
+			
 			this.bugfixerDiagnostics.delete(uri);
 
 			bugs.map(bug => {
-				//if(bug.name === "MEMORY_LEAK")
 					diagnostics.push(this.createDiagnostic(uri, bug));
 				});
 			this.bugfixerDiagnostics.set(uri, diagnostics);
 		});
 
-
-		const patch_results = patch_maker.get_patches();
-
-		patch_results.forEach(lineInfo => {
-			const uri = vscode.Uri.file(lineInfo.uri)
-
-			const diagnostics: vscode.Diagnostic[] = [];
-			this.bugfixerDiagnostics.delete(uri);
-
-			diagnostics.push(this.createPatchDiagnosticHint(lineInfo.lines));
-			diagnostics.push(this.createPatchDiagnosticError(lineInfo.lines));
-			this.bugfixerDiagnostics.set(uri, diagnostics);
-
-
-		})
 	}
 
 	private createDiagnostic(uri: vscode.Uri, bug:Bug): vscode.Diagnostic {
@@ -99,30 +85,6 @@ export class DiagnosticsProvider {
 		return diagnostic;
 	}
 	
-	// npe 에러의 파일, 라인, 컬럼 표시
-	private createPatchDiagnosticError(lines: number[]): vscode.Diagnostic {
-		const range = new vscode.Range(lines[0] - 1, 0,lines[0] -1, 999);
-
-		const diagnostic = new vscode.Diagnostic(range, "npe patch ",
-			vscode.DiagnosticSeverity.Error);
-
-		diagnostic.tags = [lines[0], lines[0]];
-		
-		return diagnostic;
-	}
-
-	// npe 패치의 파일, 라인, 컬럼 표시
-	private createPatchDiagnosticHint(lines: number[]): vscode.Diagnostic {
-		const range = new vscode.Range(lines[0] - 1, 0,lines[0] -1, 999);
-
-		const diagnostic = new vscode.Diagnostic(range, "npe patch ",
-			vscode.DiagnosticSeverity.Hint);
-
-		diagnostic.tags = [lines[0], lines[0]];
-		
-		return diagnostic;
-	}
-
 	public subscribeToDocumentChanges(context: vscode.ExtensionContext): void {
 		if (vscode.window.activeTextEditor) {
 			this.refreshDiagnostics();
