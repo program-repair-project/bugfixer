@@ -21,3 +21,14 @@ export class NPEXResult {
         public readonly verified_patches: string[]
     ) {}
 }
+export class MosesPatch {
+    constructor(
+		public readonly file: string,
+		public readonly procedure: string,
+		public readonly method: string,
+		public readonly contents: string,
+		public readonly line: number,
+		public readonly column: number,
+    ) {}
+}
+  

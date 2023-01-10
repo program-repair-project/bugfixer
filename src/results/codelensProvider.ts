@@ -49,13 +49,27 @@ export class CodelensProvider implements vscode.CodeLensProvider {
       });
 
       const npes = diagnostics.filter(diagnostic => diagnostic.code === "Null Pointer Exception");
-      const patches = patch_maker.get_patches();
-
+      
       npes.map(diagnostic => {
         const range = diagnostic.range;
+        const patches = patch_maker.get_patches();
         
         var src = diagnostic.range.start.line;
         const file = document.fileName;
+
+        patches.map((patch) => this.addLensCommand(patch.uri, file, range, src, diagnostic))
+
+      });
+
+      const c_err = diagnostics.filter(diagnostic => diagnostic.code === "Patch Found");
+
+      c_err.map(diagnostic => {
+        const range = diagnostic.range;
+        
+        var src = diagnostic.range.start.line + 1;
+        const file = document.fileName;
+
+        const patches = patch_maker.get_patches();
 
         patches.map((patch) => this.addLensCommand(patch.uri, file, range, src, diagnostic))
 

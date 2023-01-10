@@ -3,6 +3,7 @@ import { workspace } from 'vscode';
 import { Engine } from "./engine";
 import { SaverEngine } from "./saver";
 import { NPEXEngine } from "./npex";
+import { MosesEngine } from "./moses";
 import * as constans from "../common/constants";
 import * as log_util from "../common/logger";
 
@@ -21,6 +22,7 @@ export class EngineEnv {
     this.engineMap = new Map();
     this.engineMap.set("saver", new SaverEngine());
     this.engineMap.set("npex", new NPEXEngine());
+    this.engineMap.set("moses", new MosesEngine());
       
     this.current_preset = "saver";
     this.analyzer = this.engineFactory(this.current_preset);

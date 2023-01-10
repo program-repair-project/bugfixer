@@ -17,11 +17,13 @@ import * as constants from "./common/constants";
 export class EngineController {
   private _commandForRunSaver: Disposable;
   private _commandForRunNPEX: Disposable;
+  private _commandForRunMoses: Disposable;
   private logger: log_util.Logger;
 
   public constructor(private context: vscode.ExtensionContext) {
     this._commandForRunSaver = this.registerRunCommand("bugfixer.run_saver", "saver");
     this._commandForRunNPEX  = this.registerRunCommand("bugfixer.run_npex", "npex");
+    this._commandForRunMoses  = this.registerRunCommand("bugfixer.run_moses", "moses");
 
     vscode.commands.registerCommand(constants.MAKE_PATCH_COMMAND, (key) => this.make_patch(key))
     this.logger = new log_util.Logger("BugfixerController");
@@ -30,6 +32,7 @@ export class EngineController {
   public dispose() {
     this._commandForRunSaver.dispose();
     this._commandForRunNPEX.dispose();
+    this._commandForRunMoses.dispose();
   }
 
   private registerRunCommand(cmd: string, name: string) {
@@ -81,6 +84,10 @@ export class EngineController {
     }
     const exitHandler = (data:any) => { 
       vscode.commands.executeCommand('bugfixer.refreshBugs'); 
+
+      if (analyzer.name === 'Moses') {
+        analyzer.make_patch("");
+      }
     }
 
     const windowController = new wc.WindowController(this.logger, "");

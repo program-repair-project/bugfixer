@@ -51,8 +51,11 @@ export class DiagnosticsProvider {
 			this.bugfixerDiagnostics.delete(uri);
 
 			bugs.map(bug => {
-					if(EngineEnv.getInstance().get_currnet_engine() === "saver" && bug.name === "MEMORY_LEAK")
+					if(EngineEnv.getInstance().get_currnet_engine() === "saver" && bug.name === "MEMORY_LEAK") {
 						diagnostics.push(this.createDiagnostic(uri, bug));
+					} else if(EngineEnv.getInstance().get_currnet_engine() != "saver") {
+						diagnostics.push(this.createDiagnostic(uri, bug));
+					}
 				});
 			this.bugfixerDiagnostics.set(uri, diagnostics);
 		});

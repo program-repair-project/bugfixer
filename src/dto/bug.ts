@@ -12,6 +12,7 @@ export class Bug {
 	) {}
 }
 
+
 export class SaverBug {
 	constructor(
 		public readonly kind: string,
@@ -41,14 +42,31 @@ export class SaverBug {
 export class NPEXBug {
 	// npe.json
 	constructor(
-				public readonly filepath: string,
+		public readonly filepath: string,
 		public readonly line: number,
-				public readonly npe_class: string,
-				public readonly npe_method: string,
+		public readonly npe_class: string,
+		public readonly npe_method: string,
 		public readonly deref_field: string
 	) {}
 
 	public static toBug(bug: NPEXBug): Bug {
 		return new Bug("error", "Null Pointer Exception", "널 포인터 예외가 발생했습니다.", bug.line, 1, bug.filepath, bug.npe_method, bug.line, bug.line);
 	}
+}
+
+export class MosesBug {
+	constructor(
+		public readonly file: string,
+		public readonly procedure: string,
+		public readonly method: string,
+		public readonly contents: string,
+		public readonly line: number,
+		public readonly column: number,
+		
+) {}
+
+public static toBug(bug: MosesBug): Bug {
+	return new Bug("error", "Patch Found", "패치를 찾았습니다.", bug.line, 1, bug.file, bug.procedure, bug.line, bug.line);
+}
+
 }
