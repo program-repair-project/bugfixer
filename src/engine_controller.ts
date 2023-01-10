@@ -15,34 +15,34 @@ import * as wc from "./ui/window_controller";
 import * as constants from "./common/constants";
 
 export class EngineController {
-  private _commandForAnalysisAll: Disposable;
-  private _commandForAnalysisContinue: Disposable;
+  private _commandForRunSaver: Disposable;
+  private _commandForRunNPEX: Disposable;
   private logger: log_util.Logger;
 
   public constructor(private context: vscode.ExtensionContext) {
-    this._commandForAnalysisAll = commands.registerCommand("bugfixer.run_saver",
-      (uri: vscode.Uri) => {
-        this.analyze_all(uri);
-      });
-
-      this._commandForAnalysisContinue = commands.registerCommand("bugfixer.analyze_continue",
-      (uri: vscode.Uri) => {
-        this.analyze_continue(uri);
-      });
+    this._commandForRunSaver = this.registerRunCommand("bugfixer.run_saver", "saver");
+    this._commandForRunNPEX  = this.registerRunCommand("bugfixer.run_npex", "npex");
 
     vscode.commands.registerCommand(constants.MAKE_PATCH_COMMAND, (key) => this.make_patch(key))
     this.logger = new log_util.Logger("BugfixerController");
   }
 
   public dispose() {
-    this._commandForAnalysisAll.dispose();
-    this._commandForAnalysisContinue.dispose();
+    this._commandForRunSaver.dispose();
+    this._commandForRunNPEX.dispose();
+  }
+
+  private registerRunCommand(cmd: string, name: string) {
+    return commands.registerCommand(cmd,
+      (uri: vscode.Uri) => {
+        EngineEnv.getInstance().setEngineEnv(name);
+        this.analyze_all(uri);
+      }
+    );
   }
 
   protected analyze_all(uri: vscode.Uri) {
     const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
-    analyzer.build_cmd = "make";
-    analyzer.clean_build_cmd = "make clean all"
     console.log(util.getCwd());
     let args: string[] = analyzer.get_analysis_cmd();
 
@@ -50,15 +50,6 @@ export class EngineController {
     if (util.pathExists(output_path)) {
       fs.rmdirSync(output_path, { recursive: true });
     }
-
-    this.analyze(uri, analyzer, args);
-  }
-
-  protected analyze_continue(uri: vscode.Uri) {
-    const analyzer: Engine = EngineEnv.getInstance().get_analyzer();
-    analyzer.build_cmd = "make";
-    analyzer.clean_build_cmd = "make clean all"
-    let args: string[] = analyzer.get_incremental_cmd();
 
     this.analyze(uri, analyzer, args);
   }

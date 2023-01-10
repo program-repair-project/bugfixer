@@ -8,6 +8,7 @@ import { Bug, SaverBug } from "../dto/bug";
 import { SaverPatch} from '../dto/saverPatch';
 import * as util from '../common/util';
 import * as log_util from "../common/logger";
+import { PatchLineInfo } from '../results/diagnostics';
 
 export class SaverEngine extends Engine {
     private logger: log_util.Logger;
@@ -16,6 +17,8 @@ export class SaverEngine extends Engine {
         super("Saver", "docker", "infer-out");
         this.report_file = "report.json";
         this.logger = new log_util.Logger("Saver");
+        this.build_cmd = "make";
+        this.clean_build_cmd = "make clean all";
     }
 
     public get_incremental_cmd(): string[] {
@@ -200,5 +203,9 @@ export class SaverEngine extends Engine {
 
     public set_build_cmd(build_cmd: string): void {
         this.build_cmd = build_cmd;
+    }
+
+    public get_patches(): PatchLineInfo[] {
+        return [];
     }
 }
