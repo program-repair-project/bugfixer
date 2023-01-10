@@ -1,4 +1,5 @@
 import {Bug} from '../dto/bug'
+import { PatchLineInfo } from '../results/diagnostics';
 
 export abstract class Engine {
     private _name: string;
@@ -19,6 +20,7 @@ export abstract class Engine {
     abstract make_patch(key: string): void;
     abstract apply_patch(src: string, patched: string): void;
     abstract get_error_key(bug: Bug): string;
+    abstract get_patches(): PatchLineInfo[];
     
     constructor(name:string, analyze_cmd:string, output_path:string){
         this._name = name;

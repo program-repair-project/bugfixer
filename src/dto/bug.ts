@@ -37,3 +37,18 @@ export class SaverBug {
 		return new Bug(saverBug.kind, saverBug.bug_type, saverBug.qualifier, saverBug.line, saverBug.column, saverBug.file, saverBug.procedure, src, sink);
 	}
 }
+
+export class NPEXBug {
+	// npe.json
+constructor(
+			public readonly filepath: string,
+	public readonly line: number,
+			public readonly npe_class: string,
+			public readonly npe_method: string,
+	public readonly deref_field: string
+) {}
+
+public static toBug(bug: NPEXBug): Bug {
+	return new Bug("npe", "npe", "npe", bug.line, 1, bug.filepath, bug.npe_method, bug.line, bug.line);
+}
+}

@@ -9,3 +9,15 @@ export class Patch {
         private readonly patch: string
     ) {}
 }
+
+export class NPEXPatch {
+    public constructor(
+        public readonly patched_lines: number[]
+    ) {}
+}
+
+export class NPEXResult {
+    public constructor(
+        public readonly verified_patches: string[]
+    ) {}
+}

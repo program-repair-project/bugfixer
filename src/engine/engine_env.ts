@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { workspace } from 'vscode';
 import { Engine } from "./engine";
 import { SaverEngine } from "./saver";
+import { NPEXEngine } from "./npex";
 import * as constans from "../common/constants";
 
 
@@ -13,9 +14,9 @@ export class EngineEnv {
   private analyze_output_path: String;
 
   private constructor () {
-    this.analyzer = new SaverEngine();
-    this.patch_maker = new SaverEngine();
-    this.validator = new SaverEngine();
+    this.analyzer = new NPEXEngine();
+    this.patch_maker = new NPEXEngine();
+    this.validator = new NPEXEngine();
     this.analyze_output_path = workspace.getConfiguration().get("bugfixer.infer_out_path", "./output");
 
     vscode.commands.registerCommand(constans.APPLY_PATCH_COMMAND, (src, patched) => this.patch_maker.apply_patch(src, patched));
