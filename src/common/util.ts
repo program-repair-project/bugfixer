@@ -45,6 +45,11 @@ function manipulateFile(func: Function): (src: string, dst: string, line: number
 	} 
 }
 
+export function getLine(file: string, line: number): string {
+	var data = fs.readFileSync(file).toString().split("\n");
+	const target = line > 0 ? line - 1: 0;
+	return data[target];
+}
 // json 파일에서 읽어들이기
 export function readJSON<T>(jsonPath: string): T {
 	const jsonString = fs.readFileSync(jsonPath, 'utf-8');
