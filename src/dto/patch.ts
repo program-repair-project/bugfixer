@@ -21,6 +21,16 @@ export class NPEXResult {
         public readonly verified_patches: string[]
     ) {}
 }
+
+export class SaverPatch {
+    constructor(
+        public readonly method: string,
+        public readonly line: number,
+        public readonly column: number,
+        public readonly contents: string
+    ) {}
+}
+
 export class MosesPatch {
     constructor(
 		public readonly file: string,
@@ -31,4 +41,16 @@ export class MosesPatch {
 		public readonly column: number,
     ) {}
 }
+
+export class PyterPatch {
+    constructor(
+		public readonly file: string,
+		public readonly method: string,
+		public readonly contents: string,
+		public readonly line: number,
+		public readonly column: number
+    ) {}
+}
   
+
+

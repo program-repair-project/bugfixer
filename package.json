@@ -2,6 +2,7 @@
 	"name": "bugfixer",
 	"private": true,
 	"displayName": "Bug Fixer",
+	"publisher": "sparrow",
 	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.66.0"
@@ -11,7 +12,8 @@
 	],
 	"activationEvents": [
 		"onLanguage:c",
-		"onLanguage:java"
+		"onLanguage:java",
+		"onLanguage:python"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -39,6 +41,10 @@
 			{
 				"command": "print_progress_test",
 				"title": "Bugfixer 실행 중: 출력 테스트"
+			},
+			{
+				"command": "bugfixer.set_engine",
+				"title": "Bugfixer: 엔진 설정"
 			}
 		],
 		"configuration": [
@@ -86,6 +92,7 @@
 		"typescript": "^4.6.3"
 	},
 	"dependencies": {
+		"fs-readdir-recursive": "^1.1.0",
 		"install": "^0.13.0",
 		"npm": "^8.15.0",
 		"winston": "^3.8.1"

@@ -4,6 +4,7 @@ import { Engine } from "./engine";
 import { SaverEngine } from "./saver";
 import { NPEXEngine } from "./npex";
 import { MosesEngine } from "./moses";
+import { PyterEngine } from "./pyter";
 import * as constans from "../common/constants";
 import * as log_util from "../common/logger";
 
@@ -23,8 +24,9 @@ export class EngineEnv {
     this.engineMap.set("saver", new SaverEngine());
     this.engineMap.set("npex", new NPEXEngine());
     this.engineMap.set("moses", new MosesEngine());
+    this.engineMap.set("pyter", new PyterEngine());
       
-    this.current_preset = "saver";
+    this.current_preset = "pyter";
     this.analyzer = this.engineFactory(this.current_preset);
     this.patch_maker = this.engineFactory(this.current_preset);
     this.validator = this.engineFactory(this.current_preset);

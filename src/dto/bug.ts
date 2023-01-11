@@ -63,10 +63,28 @@ export class MosesBug {
 		public readonly line: number,
 		public readonly column: number,
 		
-) {}
+	) {}
 
-public static toBug(bug: MosesBug): Bug {
-	return new Bug("error", "Patch Found", "패치를 찾았습니다.", bug.line, 1, bug.file, bug.procedure, bug.line, bug.line);
+	public static toBug(bug: MosesBug): Bug {
+		return new Bug("error", "Patch Found", "패치를 찾았습니다.", bug.line, 1, bug.file, bug.procedure, bug.line, bug.line);
+	}
 }
 
+export class PyterBug {
+	constructor(
+		public readonly info: PyterPatchInfo		
+	) {}
+
+	public static toBug(bug: PyterBug): Bug {
+		return new Bug("error", "Type Error", "타입 오류가 있습니다..", bug.info.line, 1, bug.info.filename.replaceAll("/pyter/benchmark", ""), bug.info.funcname, bug.info.line, bug.info.line);
+	}
+}
+
+export class PyterPatchInfo {
+	constructor(
+		public readonly filename: string,
+		public readonly funcname: string,
+		public readonly line: number,
+		public readonly classname: number
+	) {}
 }

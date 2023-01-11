@@ -72,7 +72,19 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const patches = patch_maker.get_patches();
 
         patches.map((patch) => this.addLensCommand(patch.uri, file, range, src, diagnostic))
+      });
 
+      const typeErrs = diagnostics.filter(diagnostic => diagnostic.code === "Type Error");
+
+      typeErrs.map(diagnostic => {
+        const range = diagnostic.range;
+        
+        var src = diagnostic.range.start.line + 1;
+        const file = document.fileName;
+
+        const patches = patch_maker.get_patches();
+
+        patches.map((patch) => this.addLensCommand(patch.uri, file, range, src, diagnostic))
       });
 
       return this.codeLenses;
