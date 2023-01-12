@@ -8,7 +8,7 @@ import * as util from '../common/util';
 import * as log_util from "../common/logger";
 import { PatchLineInfo } from '../results/diagnostics';
 
-const findFiles = require("fs-readdir-recursive");
+import findFiles = require("fs-readdir-recursive");
 
 export class PyterEngine extends Engine {
   private logger: log_util.Logger;
