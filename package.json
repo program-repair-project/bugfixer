@@ -3,7 +3,7 @@
 	"private": true,
 	"displayName": "Bug Fixer",
 	"publisher": "sparrow-and-codemind",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"icon": "bugfixer.ico",
 	"repository": "https://github.com/program-repair-project/bugfixer",
 	"engines": {
