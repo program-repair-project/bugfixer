@@ -2,13 +2,17 @@
 	"name": "bugfixer",
 	"private": true,
 	"displayName": "Bug Fixer",
-	"publisher": "sparrow",
-	"version": "0.0.2",
+	"publisher": "sparrow-and-codemind",
+	"version": "0.9.0",
+	"icon": "favicon.ico",
+	"repository": "https://github.com/program-repair-project/bugfixer",
 	"engines": {
 		"vscode": "^1.66.0"
 	},
 	"categories": [
-		"Other"
+		"Debuggers",
+		"Testing",
+		"Linters"
 	],
 	"activationEvents": [
 		"onLanguage:c",
@@ -44,7 +48,11 @@
 			},
 			{
 				"command": "bugfixer.set_engine",
-				"title": "Bugfixer: 엔진 설정"
+				"title": "Bugfixer: 엔진 설정",
+				"args": [
+					"saver",
+					"npex"
+				]
 			}
 		],
 		"configuration": [
@@ -84,6 +92,7 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
+		"@types/fs-readdir-recursive": "^1.1.0",
 		"@types/node": "^12.12.0",
 		"@types/vscode": "^1.32.0",
 		"@typescript-eslint/eslint-plugin": "^5.31.0",
