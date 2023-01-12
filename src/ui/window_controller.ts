@@ -53,7 +53,7 @@ export class WindowController {
           process.stdout.on("data", data => {
             let log: string = data.toString();
             this.logger.debug(log);
-            progress.report({ message: log });
+            //progress.report({ message: log });
             stdoutHandler(log);
           });
 
