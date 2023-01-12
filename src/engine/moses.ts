@@ -30,8 +30,8 @@ export class MosesEngine extends Engine {
   }
 
   public get_analysis_cmd(): string[] {
-      const cmd: string[] = ["run", "-w", "/experiment", "-v", `${util.getCwd()}/repair-out:/experiment/535-A-bug-13831501-13831529/repair-out`, "huna3869/codeflaws:test","/bin/bash", "-c"];
-      cmd.push("cp codeflaws/535-A-bug-13831501-13831529 ./ -r; cd 535-A-bug-13831501-13831529; ../transform.sh 535-A-13831501.c; ../repair.native -print_v -timeout_test 30 -timeout_sygus 180 -debug -sygus ../synth.sh -notempl -susloc 100 -loop_limit 0 -range 1000 -origdir ./backup -pos 5 -neg 1 535-A-13831501.c ./test-genprog.sh; cd repair-out/; cat result.json");
+      const cmd: string[] = ["run", "-w", "/experiment", "-v", `${util.getCwd()}/repair-out:/experiment/src/repair-out`, "huna3869/manybugs:gzip-2009-09-26-a1d3d4019d-f17cbd13a1","/bin/bash", "-c"];
+      cmd.push("./conduct.sh");
       return cmd;
   }
 
