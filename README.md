@@ -24,7 +24,7 @@ Bugfixer provides below features.
 - docker pull jeminya/npex:1.1
 - docker pull huna3869/manybugs:gzip-2009-09-26-a1d3d4019d-f17cbd13a1
 - docker pull pyter:latest
-- unpack the https://github.com/program-repair-project/bugfixer/blob/main/benchmark.zip file to "benchmark" directory
+- unpack the https://github.com/program-repair-project/bugfixer/blob/main/example.zip file to "example" directory
 
 ### Build
 
@@ -40,13 +40,13 @@ npm install
 - Press F5 to Run/Debug
 - Press ctrl + shift + p. Then
   - To fix C code with testcases (test script), type "Bugfixer" and select "Bugfixer 실행: 명세 기반 분석 [C]"
-    - To see the best result, run "open directory" command (ctrl +k, c) and select "benchmark/moses/gzip/src".
+    - To see the best result, run "open directory" command (ctrl +k, c) and select "example/moses/gzip/src".
   - To fix Memory Leak Error in your C code, type "Bugfixer" and select "Bugfixer 실행: 명세 없이 분석 [C]"
-    - To see the best result, run "open directory" command (ctrl +k, c) and select "benchmark/saver/WavPack".
+    - To see the best result, run "open directory" command (ctrl +k, c) and select "example/saver/WavPack".
   - To fix Null Pointer Exception in your Java code, type "Bugfixer" and select "Bugfixer 실행: 명세 없이 분석 [Java]"
-    - To see the best result, run "open directory" command (ctrl +k, c) and select "benchmark/npex/aries-jpa-example".
+    - To see the best result, run "open directory" command (ctrl +k, c) and select "example/npex/aries-jpa-example".
   - To fix Type Error in your Python code, type "Bugfixer" and select "Bugfixer 실행: 명세 없이 분석 [Python]"
-    - To see the best result, run "open directory" command (ctrl +k, c) and select "benchmark/pyter".
+    - To see the best result, run "open directory" command (ctrl +k, c) and select "example/pyter".
 - Now you can see error list and see the patch with the diff form.
 
 ### Related Information
