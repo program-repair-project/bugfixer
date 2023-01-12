@@ -63,7 +63,6 @@ export class EngineController {
   protected analyze(uri: vscode.Uri, analyzer: Engine, args: string[]) {
     const output_path = path.join(util.getCwd(), analyzer.output_path);
 
-    vscode.window.showInformationMessage(`${analyzer.analyze_cmd} ${args.join(" ")}`);
     this.logger.info(`${analyzer.analyze_cmd} ${args.join(" ")}`);
 
     //Create output channel
@@ -74,7 +73,7 @@ export class EngineController {
       const log = data.log;
 
       if (log.includes("Starting Process...")) {
-        progress.report({ message: `${analyzer.name} 실행 중` });
+        progress.report({ message: `Bugfixer 실행 중` });
       }
 
       //Write to output.
@@ -102,7 +101,7 @@ export class EngineController {
 
     vscode.commands.executeCommand("bugfixer.clearDiag");
     vscode.commands.executeCommand('bugfixer.refreshBugs'); 
-    windowController.runWithProgress(`${analyzer.name} 실행`, analyzer.name, analyzer.analyze_cmd, args, stdoutHandler, stderrHandler, exitHandler);
+    windowController.runWithProgress(`BugFixer 실행`, "BugFixer", analyzer.analyze_cmd, args, stdoutHandler, stderrHandler, exitHandler);
   }
 
   protected make_patch(key: string) {
