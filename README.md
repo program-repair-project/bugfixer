@@ -10,6 +10,10 @@ Bugfixer provides below features.
 - Find bugs, generate patches and applying patch (JAVA language).
 - Find bugs, generate patches and applying patch (Python language).
 
+## Demo
+
+![Demo](./demo.gif)  
+
 ## Installation Guides
 
 ### Requirements
